@@ -1,3 +1,3 @@
-export default interface DomainError {
+export interface DomainError {
   message: string;
 }

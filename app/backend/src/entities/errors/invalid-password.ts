@@ -1,8 +1,8 @@
-import DomainError from './domain-error';
+import { DomainError } from './domain-error';
 
 export default class InvalidPasswordError extends Error implements DomainError {
   constructor() {
-    super('Incorrect email or password');
+    super('Invalid Password');
 
     this.name = 'InvalidPasswordError';
   }
