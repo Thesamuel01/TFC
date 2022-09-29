@@ -1,6 +1,7 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
 
+import User from '../entities/user';
 import { UserDataDTO } from '../DTOs/user-data-dto';
 // @ts-ignore
 const { expect } = chai;
@@ -13,11 +14,10 @@ describe('User domain entity', () => {
       role: 'user',
       password: '324y239yrh2',
     }
-    const User = {
-      create(user: UserDataDTO) {}
-    }
 
-    expect(User.create(userData)).to.be.an.instanceof(User);
+    const user = User.create(userData);
+
+    expect(user).to.be.an.instanceof(User);
   });
 
   it('should not able to create a user with a invalid email', () => {
@@ -26,10 +26,6 @@ describe('User domain entity', () => {
       username: 'teste@12',
       role: 'user',
       password: '324y239yrh2',
-    }
-
-    const User = {
-      create(user: UserDataDTO) {}
     }
 
     expect(() => {
@@ -43,10 +39,6 @@ describe('User domain entity', () => {
       username: 'teste@12',
       role: 'user',
       password: '38&h',
-    }
-
-    const User = {
-      create(user: UserDataDTO) {}
     }
 
     expect(() => {
