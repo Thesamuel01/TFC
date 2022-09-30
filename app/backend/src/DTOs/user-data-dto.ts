@@ -1,5 +1,5 @@
 export interface UserDataDTO {
-  id?: number;
+  id: number;
   email: string;
   username: string;
   role: string;

@@ -5,9 +5,10 @@ import * as chaiAsPromised from 'chai-as-promised';
 import { UserDataDTO } from '../DTOs/user-data-dto';
 import LoginUser from '../use-cases/login-user/login-user';
 import InMemoryUserRepository from '../repositories/in-memory/in-memory-user-repository';
-import passwordHashingAdapterMock from './mocks/password-hashing-mock';
 import { InvalidEmailError, InvalidPasswordError} from '../entities/errors';
 import { IncorrectEmailError, IncorrectPasswordError } from '../use-cases/errors';
+import { TokenHashing } from '../adapters';
+import { PasswordHashingAdapterMock, TokenHashingAdapterMock } from './mocks';
 
 // @ts-ignore
 
@@ -16,13 +17,19 @@ chai.use(chaiAsPromised);
 
 describe('Login use case', () => {
   let userRepository: InMemoryUserRepository;
-  let passwordHashingAdapter: passwordHashingAdapterMock;
+  let passwordHashingAdapter: PasswordHashingAdapterMock;
+  let tokenHashingAdapter: TokenHashing;
   let loginUseCase: LoginUser;
   
   before(() => {
     userRepository = new InMemoryUserRepository()
-    passwordHashingAdapter = new passwordHashingAdapterMock()
-    loginUseCase = new LoginUser(userRepository, passwordHashingAdapter)
+    passwordHashingAdapter = new PasswordHashingAdapterMock()
+    tokenHashingAdapter = new TokenHashingAdapterMock()
+    loginUseCase = new LoginUser(
+      userRepository,
+      passwordHashingAdapter,
+      tokenHashingAdapter
+    )
   })
 
   it('should login user by returning a token', async () => {

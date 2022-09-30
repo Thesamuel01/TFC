@@ -2,9 +2,9 @@ import { UserRepository } from '../../repositories/user-repository';
 import { LoginUserRequestDTO } from '../../DTOs/login-user-request-dto';
 import { Email, Password } from '../../entities';
 import { TokenDTO } from '../../DTOs/token-dto';
-import { PasswordHashing } from '../../adapters/password-hashing';
 import { IncorrectEmailError, IncorrectPasswordError } from '../errors';
 import { InvalidEmailError, InvalidPasswordError } from '../../entities/errors';
+import { PasswordHashing, TokenHashing } from '../../adapters';
 
 export type LoginUserResponse = TokenDTO;
 
@@ -12,6 +12,7 @@ export default class LoginUser {
   constructor(
     private userRepository: UserRepository,
     private passwordHashingAdapter: PasswordHashing,
+    private tokenHashingAdapter: TokenHashing,
   ) {}
 
   async execute(data: LoginUserRequestDTO): Promise<LoginUserResponse> {
@@ -34,7 +35,8 @@ export default class LoginUser {
       throw new IncorrectPasswordError();
     }
 
-    const token = this.passwordHashingAdapter.generate();
+    const { id, role, email } = userExists;
+    const token = this.tokenHashingAdapter.generate({ id, role, email });
 
     return { token };
   }

@@ -1,14 +1,14 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
 
-import User from '../entities/user';
-import { UserDataDTO } from '../DTOs/user-data-dto';
+import { User } from '../entities';
+import { ICreateUserData } from '../entities/user';
 // @ts-ignore
 const { expect } = chai;
 
 describe('User domain entity', () => {
   it('should able to create a user', () => {
-    const userData: UserDataDTO = {
+    const userData: ICreateUserData = {
       email: 'teste@teste.com',
       username: 'teste@12',
       role: 'user',
@@ -21,7 +21,7 @@ describe('User domain entity', () => {
   });
 
   it('should not able to create a user with a invalid email', () => {
-    const user: UserDataDTO = {
+    const user: ICreateUserData = {
       email: 'teste_teste.com',
       username: 'teste@12',
       role: 'user',
@@ -34,7 +34,7 @@ describe('User domain entity', () => {
   });
 
   it('should not able to create a user with a invalid password', () => {
-    const user: UserDataDTO = {
+    const user: ICreateUserData = {
       email: 'teste@teste.com',
       username: 'teste@12',
       role: 'user',
