@@ -1,5 +1,5 @@
-import User from '../entities/user';
+import { UserDataDTO } from '../DTOs/user-data-dto';
 
 export interface UserRepository {
-  findByEmail(email: string): Promise<User>
+  findByEmail(email: string): Promise<UserDataDTO | null>
 }
