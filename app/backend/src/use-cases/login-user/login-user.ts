@@ -1,11 +1,10 @@
 import { UserRepository } from '../../repositories/user-repository';
 import { LoginUserRequestDTO } from '../../DTOs/login-user-request-dto';
-import Email from '../../entities/email';
-import Password from '../../entities/password';
+import { Email, Password } from '../../entities';
 import { TokenDTO } from '../../DTOs/token-dto';
 import { PasswordHashing } from '../../adapters/password-hashing';
-import InvalidPasswordError from '../../entities/errors/invalid-password';
-import IncorrectEmail from '../errors/incorrect-email-error';
+import { IncorrectEmailError, IncorrectPasswordError } from '../errors';
+import { InvalidEmailError, InvalidPasswordError } from '../../entities/errors';
 
 export type LoginUserResponse = TokenDTO;
 
@@ -16,19 +15,23 @@ export default class LoginUser {
   ) {}
 
   async execute(data: LoginUserRequestDTO): Promise<LoginUserResponse> {
-    Email.validate(data.email);
-    Password.validate(data.password);
+    const isEmailValid = Email.validate(data.email);
+    const isPasswordValid = Password.validate(data.password);
+
+    if (!isEmailValid || !isPasswordValid) {
+      throw isPasswordValid ? new InvalidEmailError() : new InvalidPasswordError();
+    }
 
     const userExists = await this.userRepository.findByEmail(data.email);
 
     if (!userExists) {
-      throw new IncorrectEmail();
+      throw new IncorrectEmailError();
     }
 
-    const isUser = this.passwordHashingAdapter.check(data.password, userExists.password);
+    const isPassworCorrect = this.passwordHashingAdapter.check(data.password, userExists.password);
 
-    if (isUser) {
-      throw new InvalidPasswordError();
+    if (!isPassworCorrect) {
+      throw new IncorrectPasswordError();
     }
 
     const token = this.passwordHashingAdapter.generate();

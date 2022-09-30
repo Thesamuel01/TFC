@@ -1,6 +1,6 @@
 import { UseCaseError } from './use-cases-error';
 
-export default class IncorrectPassword extends Error implements UseCaseError {
+export default class IncorrectPasswordError extends Error implements UseCaseError {
   constructor() {
     super('Incorrect password');
 

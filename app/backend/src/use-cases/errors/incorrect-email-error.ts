@@ -1,6 +1,6 @@
 import { UseCaseError } from './use-cases-error';
 
-export default class IncorrectEmail extends Error implements UseCaseError {
+export default class IncorrectEmailError extends Error implements UseCaseError {
   constructor() {
     super('Incorrect email');
 
