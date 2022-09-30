@@ -3,11 +3,11 @@ import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 
 import { UserDataDTO } from '../DTOs/user-data-dto';
-import LoginUser from '../use-cases/login-user/login-user';
+import LoginUser from '../use-cases/login-user';
 import InMemoryUserRepository from '../repositories/in-memory/in-memory-user-repository';
 import { InvalidEmailError, InvalidPasswordError} from '../entities/errors';
 import { IncorrectEmailError, IncorrectPasswordError } from '../use-cases/errors';
-import { TokenHashing } from '../adapters';
+import { PasswordHashing, TokenHashing } from '../adapters';
 import { PasswordHashingAdapterMock, TokenHashingAdapterMock } from './mocks';
 
 // @ts-ignore
@@ -17,18 +17,18 @@ chai.use(chaiAsPromised);
 
 describe('Login use case', () => {
   let userRepository: InMemoryUserRepository;
-  let passwordHashingAdapter: PasswordHashingAdapterMock;
   let tokenHashingAdapter: TokenHashing;
+  let passwordHasingAdapter: PasswordHashing;
   let loginUseCase: LoginUser;
   
   before(() => {
     userRepository = new InMemoryUserRepository()
-    passwordHashingAdapter = new PasswordHashingAdapterMock()
     tokenHashingAdapter = new TokenHashingAdapterMock()
+    passwordHasingAdapter = new PasswordHashingAdapterMock();
     loginUseCase = new LoginUser(
       userRepository,
-      passwordHashingAdapter,
-      tokenHashingAdapter
+      tokenHashingAdapter,
+      passwordHasingAdapter,
     )
   })
 
