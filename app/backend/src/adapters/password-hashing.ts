@@ -1,3 +1,3 @@
 export interface PasswordHashing {
-  check(password: string, hash: string): boolean
+  compare(password: string, hash: string): boolean
 }
