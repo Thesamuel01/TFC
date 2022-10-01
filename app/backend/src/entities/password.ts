@@ -1,3 +1,4 @@
+import { genSaltSync, hashSync } from 'bcryptjs';
 import { InvalidPasswordError } from './errors';
 
 export default class Password {
@@ -14,7 +15,9 @@ export default class Password {
       throw new InvalidPasswordError();
     }
 
-    return new Password(password);
+    const hash = this.generateHash(password);
+
+    return new Password(hash);
   }
 
   static validate(password: string): boolean {
@@ -23,5 +26,12 @@ export default class Password {
     }
 
     return true;
+  }
+
+  private static generateHash(password: string): string {
+    const salt = genSaltSync();
+    const hash = hashSync(password, salt);
+
+    return hash;
   }
 }

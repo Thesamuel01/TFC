@@ -5,14 +5,14 @@ import { UserDataDTO } from '../DTOs';
 export default class User {
   public readonly id: number;
   public readonly email: Email;
-  public readonly password: Password;
+  public readonly passwordHash: Password;
   public readonly role: string;
   public readonly username: string;
 
   private constructor(props: User) {
     this.id = props.id;
     this.email = props.email;
-    this.password = props.password;
+    this.passwordHash = props.passwordHash;
     this.role = props.role;
     this.username = props.username;
   }
@@ -24,7 +24,7 @@ export default class User {
     return new User({
       id: props.id,
       email: emailOrError,
-      password: passwordOrError,
+      passwordHash: passwordOrError,
       role: props.role,
       username: props.username,
     });
