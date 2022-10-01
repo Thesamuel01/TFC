@@ -2,9 +2,10 @@ import { UserRepository } from '../repositories/user-repository';
 import { LoginUserRequestDTO } from '../DTOs/login-user-request-dto';
 import { Email, Password } from '../entities';
 import { TokenDTO } from '../DTOs/token-dto';
-import { IncorrectEmailError, IncorrectPasswordError } from './errors';
+import { IncorrectEmailError, IncorrectPasswordError, TokenExpiredError } from './errors';
 import { InvalidEmailError, InvalidPasswordError } from '../entities/errors';
 import { PasswordHashing, TokenHashing } from '../adapters';
+import { ITokenPayload } from '../adapters/token-hashing';
 
 export type LoginUserResponse = TokenDTO;
 
@@ -26,15 +27,27 @@ export default class LoginUser {
       throw new IncorrectEmailError();
     }
 
-    const isPasswordCorrect = this.passwordHasing.compare(data.password, userExists.password.value);
+    const isPasswordCorrect = this
+      .passwordHasing
+      .compare(data.password, userExists.password);
 
     if (!isPasswordCorrect) {
       throw new IncorrectPasswordError();
     }
 
     const { id, role, email } = userExists;
-    const token = this.tokenHashingAdapter.generate({ id, role, email: email.value });
+    const token = this.tokenHashingAdapter.generate({ id, role, email });
 
     return { token };
+  }
+
+  validate(token: string): ITokenPayload {
+    const tokenValues = this.tokenHashingAdapter.validate(token);
+
+    if (!tokenValues) {
+      throw new TokenExpiredError();
+    }
+
+    return tokenValues;
   }
 }
