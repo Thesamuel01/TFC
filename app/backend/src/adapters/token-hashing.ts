@@ -5,5 +5,6 @@ export interface ITokenPayload {
 }
 
 export interface TokenHashing {
-  generate(payload: ITokenPayload): string
+  generate(payload: ITokenPayload): string;
+  validate(token: string): ITokenPayload | null;
 }
