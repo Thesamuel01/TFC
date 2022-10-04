@@ -1,6 +1,6 @@
-import LoginController from './express';
-import LoginUser from '../use-cases/login-user';
-import SequelizeUserReposiroty from './sequelize';
+import { ExpressLoginController } from './express';
+import { LoginUser } from '../use-cases';
+import { SequelizeUserReposiroty } from './sequelize';
 import JWTTokenHashing from './jwt';
 import BCryptPasswordHashing from './bcrypt';
 
@@ -14,9 +14,9 @@ const loginUserUseCase = new LoginUser(
   bCryptPasswordHashing,
 );
 
-const loginUserController = new LoginController(loginUserUseCase);
+const loginUserImplementation = new ExpressLoginController(loginUserUseCase);
 
 export {
-  loginUserController,
+  loginUserImplementation,
   loginUserUseCase,
 };
