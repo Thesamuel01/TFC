@@ -1,7 +1,11 @@
-import { Secret, sign, SignOptions, verify } from 'jsonwebtoken';
-import { ITokenPayload } from '../../adapters/token-hashing';
-import { TokenHashing } from '../../adapters';
+import {
+  JsonWebTokenError, Secret, SignOptions, TokenExpiredError,
+  sign, verify,
+} from 'jsonwebtoken';
 import 'dotenv/config';
+
+import { ITokenPayload, TokenResult } from '../../adapters/token-hashing';
+import { TokenHashing } from '../../adapters';
 
 export default class JWTTokenHashing implements TokenHashing {
   constructor(
@@ -13,13 +17,21 @@ export default class JWTTokenHashing implements TokenHashing {
     return sign(payload, this.secret, this.options);
   }
 
-  validate(token: string): ITokenPayload | null {
+  validate(token: string): TokenResult | void {
     try {
-      const tokenValues = verify(token, this.secret, this.options);
+      const result = verify(token, this.secret, this.options);
 
-      return tokenValues as ITokenPayload;
+      return { value: result, isValid: true, isExpired: false } as TokenResult;
     } catch (err) {
-      return null;
+      if (err instanceof TokenExpiredError) {
+        return { value: null, isValid: true, isExpired: true };
+      }
+
+      if (err instanceof JsonWebTokenError) {
+        return { value: null, isValid: false };
+      }
+
+      console.error(err);
     }
   }
 }
