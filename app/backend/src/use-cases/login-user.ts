@@ -2,7 +2,10 @@ import { UserRepository } from '../repositories/user-repository';
 import { LoginUserRequestDTO } from '../DTOs/login-user-request-dto';
 import { Email, Password } from '../entities';
 import { TokenDTO } from '../DTOs/token-dto';
-import { IncorrectEmailError, IncorrectPasswordError, TokenExpiredError } from './errors';
+import {
+  IncorrectEmailError, IncorrectPasswordError,
+  InvalidTokenError, TokenExpiredError, UnknownError,
+} from './errors';
 import { InvalidEmailError, InvalidPasswordError } from '../entities/errors';
 import { PasswordHashing, TokenHashing } from '../adapters';
 import { ITokenPayload } from '../adapters/token-hashing';
@@ -42,12 +45,20 @@ export default class LoginUser {
   }
 
   validate(token: string): ITokenPayload {
-    const tokenValues = this.tokenHashingAdapter.validate(token);
+    const result = this.tokenHashingAdapter.validate(token);
 
-    if (!tokenValues) {
+    if (!result) {
+      throw new UnknownError();
+    }
+
+    if (!result.isValid) {
+      throw new InvalidTokenError();
+    }
+
+    if (result.isExpired) {
       throw new TokenExpiredError();
     }
 
-    return tokenValues;
+    return result.value as ITokenPayload;
   }
 }
