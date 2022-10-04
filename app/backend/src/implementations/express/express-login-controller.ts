@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import LoginUserUseCase from '../../use-cases/login-user';
-import { LoginUserController } from '../../controllers/login-user-controller';
+import { Controller } from '../../adapters';
 import HttpError from './helpers/http-status-error';
 import { InvalidEmailError, InvalidPasswordError } from '../../entities/errors';
 import {
@@ -10,8 +10,7 @@ import {
   TokenExpiredError,
 } from '../../use-cases/errors';
 
-export default class ExpressLoginController
-implements LoginUserController<Request, Response, NextFunction> {
+export default class ExpressLoginController implements Controller<Request, Response, NextFunction> {
   constructor(
     private loginUserUseCase: LoginUserUseCase,
   ) {}
