@@ -4,7 +4,7 @@ import { afterEach, beforeEach } from 'mocha';
 import { sign } from 'jsonwebtoken';
 import 'dotenv/config';
 
-import ExpressLoginController from '../implementations/express';
+import { ExpressLoginController } from '../implementations/express';
 import { LoginUserRequestDTO } from '../DTOs';
 import { loginUserUseCase } from './mocks/login-user-use-case-mock';
 import testController from './helpers/controllerTest';

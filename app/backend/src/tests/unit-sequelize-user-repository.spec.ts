@@ -1,7 +1,7 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
 
-import SequelizeUserReposiroty from '../implementations/sequelize'
+import { SequelizeUserReposiroty } from '../implementations/sequelize'
 import { UserDataDTO } from '../DTOs';
 import User from '../database/models/User';
 
