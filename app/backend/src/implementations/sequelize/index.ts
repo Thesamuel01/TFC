@@ -1,3 +1,7 @@
 import SequelizeUserReposiroty from './sequelize-user-repository';
+import SequelizeTeamRpository from './sequelize-team-repository';
 
-export default SequelizeUserReposiroty;
+export {
+  SequelizeUserReposiroty,
+  SequelizeTeamRpository,
+};
