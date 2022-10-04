@@ -10,6 +10,7 @@ enum statusCodes {
 enum errorName {
   BAD_REQUEST = 'HttpErrorBadRequest',
   UNAUTHORIZED = 'HttpErrorUnauthorized',
+  NOT_FOUND = 'HttpErrorNotFound',
 }
 
 export default class HttpError extends Error {
@@ -35,6 +36,14 @@ export default class HttpError extends Error {
       message,
       statusCodes.UNAUTHORIZED,
       errorName.UNAUTHORIZED,
+    );
+  }
+
+  static notFound(message: string): HttpError {
+    return new HttpError(
+      message,
+      statusCodes.NOT_FOUND,
+      errorName.NOT_FOUND,
     );
   }
 }
