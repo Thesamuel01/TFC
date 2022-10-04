@@ -1,12 +1,18 @@
 import { TokenHashing } from "../../adapters";
-import { ITokenPayload } from "../../adapters/token-hashing";
+import { ITokenPayload, TokenResult } from "../../adapters/token-hashing";
 
 export default class TokenHashingAdapterMock implements TokenHashing {
-  validate(token: string): ITokenPayload | null {
-    return !token ? null : {
-      id: 1,
-      role: 'user',
-      email: 'test@test.com',
+  validate(token: string): TokenResult | void {
+    if (token) {
+      return {
+        value: {
+          id: 1,
+          role: 'user',
+          email: 'test@test.com',
+        },
+        isValid: true,
+        isExpired: false,
+      }
     }
   }
 
