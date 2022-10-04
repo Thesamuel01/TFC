@@ -9,8 +9,8 @@ const router = Router();
 
 router.post('/login', loginUserImplementation.handle);
 router.get('/login/validate', loginUserImplementation.validate);
-router.get('/team', getTeamsImplementation.handle);
-router.get('/team/:id', getTeamsImplementation.handle);
+router.get('/teams', getTeamsImplementation.handle);
+router.get('/teams/:id', getTeamsImplementation.handle);
 
 router.use((
   err: HttpError | Error,
