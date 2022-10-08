@@ -1,17 +1,17 @@
 import Team from './team';
 
-export type TeamProps = {
-  id: number,
-  name: string,
-};
-
 export type MatchData = {
   id?: number;
-  homeTeam: TeamProps;
+  homeTeam: Team;
   homeTeamGoals: number;
-  awayTeam: TeamProps;
+  awayTeam: Team;
   awayTeamGoals: number;
   inProgress: boolean;
+};
+
+export type UpdateMatchData = {
+  homeTeamGoals: number,
+  awayTeamGoals: number,
 };
 
 export default class Match {
@@ -29,11 +29,11 @@ export default class Match {
 
     this.homeTeam = Team.create({
       id: props.homeTeam.id,
-      name: props.homeTeam.name,
+      name: props.homeTeam.teamName,
     });
     this.awayTeam = Team.create({
       id: props.awayTeam.id,
-      name: props.awayTeam.name,
+      name: props.awayTeam.teamName,
     });
 
     this.homeTeamGoals = props.homeTeamGoals;
