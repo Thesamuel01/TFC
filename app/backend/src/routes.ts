@@ -2,7 +2,11 @@ import 'express-async-errors';
 import { NextFunction, Request, Response, Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import { loginUserImplementation, getTeamsImplementation } from './implementations';
+import {
+  loginUserImplementation,
+  getTeamsImplementation,
+  getMatchesImplementation
+} from './implementations';
 import HttpError from './implementations/express/helpers/http-status-error';
 
 const router = Router();
@@ -11,6 +15,7 @@ router.post('/login', loginUserImplementation.handle);
 router.get('/login/validate', loginUserImplementation.validate);
 router.get('/teams', getTeamsImplementation.handle);
 router.get('/teams/:id', getTeamsImplementation.handle);
+router.get('/matches', getMatchesImplementation.handle);
 
 router.use((
   err: HttpError | Error,
