@@ -4,6 +4,7 @@ import TokenExpiredError from './token-expired-error';
 import UnknownError from './unknown-error';
 import InvalidTokenError from './invalid-token';
 import NotFoundError from './not-found-error';
+import EqualTeamsIDsError from './equal-teams-ids-error';
 
 export {
   IncorrectEmailError,
@@ -12,4 +13,5 @@ export {
   UnknownError,
   InvalidTokenError,
   NotFoundError,
+  EqualTeamsIDsError,
 };
