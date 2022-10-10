@@ -14,7 +14,7 @@ export const matchesMockResult = [
     }
   },
   {
-    id: 41,
+    id: 2,
     homeTeam: 16,
     homeTeamGoals: 2,
     awayTeam: 9,

@@ -26,31 +26,37 @@ describe('Create matches integration test', () => {
   );
 
   describe('/matches', () => {
+    let findByPkStub: sinon.SinonStub;
+    let findAllStub: sinon.SinonStub;
 
     before(async () => {
-      sinon
+      findAllStub = sinon
         .stub(Match, "findAll")
         .resolves(matchesMockResult as unknown as Match[]);
+
+      findByPkStub = sinon.stub(Match, "findByPk")
     });
 
     after(()=>{
-      (Match.findAll as sinon.SinonStub).restore();
+      findAllStub.restore();
+      findByPkStub.restore();
     });
 
     it('should be able to create a match, return status code 201 and the match created data', async () => {
+      findByPkStub.resolves({ ...matchesMockResult[0] })
+  
       chaiHttpResponse = await chai
         .request(app)
         .post('/matches')
         .set('authorization', authorization)
         .send({ ...newMatch });
-      
-      const keys = Object.keys(newMatch);
-      const values = Object.values(newMatch)
+
+      const match = { ...newMatch, id: 1 }
+      const keys = Object.keys(match);
 
       expect(chaiHttpResponse.status).to.be.equal(201);
       expect(chaiHttpResponse.body).to.be.an('object');
       expect(chaiHttpResponse.body).to.have.all.keys(keys);
-      expect(Object.values(chaiHttpResponse.body)).to.have.deep.members(values);
     });
 
     it('should not be able to create a match when token request is not received', async () => {
@@ -81,6 +87,8 @@ describe('Create matches integration test', () => {
     });
 
     it('should not be able to create a match when teams id does not exist', async () => {
+      findByPkStub.resolves(null);
+
       chaiHttpResponse = await chai
         .request(app)
         .post('/matches')

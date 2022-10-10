@@ -52,7 +52,7 @@ describe('Get matches integration test', () => {
         .request(app)
         .get('/matches?inProgress=true')
 
-      expect(chaiHttpResponse.status).to.be.equal(201);
+      expect(chaiHttpResponse.status).to.be.equal(200);
       expect(chaiHttpResponse.body).to.be.an('array');
       expect(chaiHttpResponse.body[0]).to.have.property('inProgress', true);
     });
@@ -62,7 +62,7 @@ describe('Get matches integration test', () => {
         .request(app)
         .get('/matches?inProgress=false')
    
-      expect(chaiHttpResponse.status).to.be.equal(201);
+      expect(chaiHttpResponse.status).to.be.equal(200);
       expect(chaiHttpResponse.body).to.be.an('array');
       expect(chaiHttpResponse.body[0]).to.have.property('inProgress', false);
     });
