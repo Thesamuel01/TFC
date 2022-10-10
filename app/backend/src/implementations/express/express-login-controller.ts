@@ -7,6 +7,7 @@ import { InvalidEmailError, InvalidPasswordError } from '../../entities/errors';
 import {
   IncorrectEmailError,
   IncorrectPasswordError,
+  InvalidTokenError,
   TokenExpiredError,
 } from '../../use-cases/errors';
 
@@ -50,6 +51,10 @@ export default class ExpressLoginController implements Controller<Request, Respo
 
       return res.status(StatusCodes.OK).json({ role });
     } catch (error) {
+      if (error instanceof InvalidTokenError) {
+        return next(HttpError.unauthorized('Token expired'));
+      }
+
       if (error instanceof TokenExpiredError) {
         return next(HttpError.unauthorized('Token expired'));
       }
