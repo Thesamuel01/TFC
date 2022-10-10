@@ -25,11 +25,10 @@ export default class SequelizeMatchReposiroty implements MatchRepository {
 
   async update({
     id,
-    homeTeamGoals,
-    awayTeamGoals,
+    ...params
   }: UpdateMatchDTO): Promise<void> {
     await this.model.update(
-      { homeTeamGoals, awayTeamGoals },
+      { ...params },
       { where: { id } },
     );
   }
