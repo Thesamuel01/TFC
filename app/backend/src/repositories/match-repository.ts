@@ -1,5 +1,4 @@
-import { CreateMatchDTO, MatchDataDTO } from '../DTOs';
-import { UpdateMatchData } from '../entities/match';
+import { CreateMatchDTO, MatchDataDTO, UpdateMatchDTO } from '../DTOs';
 
 export interface FindAllParams {
   where: {
@@ -10,6 +9,6 @@ export interface FindAllParams {
 export interface MatchRepository {
   findAll(params?: FindAllParams): Promise<MatchDataDTO[]>
   findByPk(id: number): Promise<MatchDataDTO | null>
-  update(values: UpdateMatchData): Promise<void>
+  update(values: UpdateMatchDTO): Promise<void>
   create(data: CreateMatchDTO): Promise<MatchDataDTO>
 }
