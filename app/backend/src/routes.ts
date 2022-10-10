@@ -5,7 +5,10 @@ import { StatusCodes } from 'http-status-codes';
 import {
   loginUserImplementation,
   getTeamsImplementation,
-  getMatchesImplementation
+  getMatchesImplementation,
+  createMatchImplementation,
+  authControllerImplementation,
+  updateMatchImplementation,
 } from './implementations';
 import HttpError from './implementations/express/helpers/http-status-error';
 
@@ -16,6 +19,9 @@ router.get('/login/validate', loginUserImplementation.validate);
 router.get('/teams', getTeamsImplementation.handle);
 router.get('/teams/:id', getTeamsImplementation.handle);
 router.get('/matches', getMatchesImplementation.handle);
+router.post('/matches', authControllerImplementation.handle, createMatchImplementation.handle);
+router.patch('/matches/:id', updateMatchImplementation.handle);
+router.patch('/matches/:id/finish', updateMatchImplementation.handle);
 
 router.use((
   err: HttpError | Error,
