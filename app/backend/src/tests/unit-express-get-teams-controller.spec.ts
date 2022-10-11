@@ -1,7 +1,6 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
 import { afterEach, beforeEach } from 'mocha';
-import { sign } from 'jsonwebtoken';
 import 'dotenv/config';
 
 import { ExpressGetTeamsController } from '../implementations/express';

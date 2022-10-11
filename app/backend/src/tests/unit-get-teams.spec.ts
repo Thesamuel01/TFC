@@ -12,7 +12,7 @@ import { NotFoundError } from '../use-cases/errors';
 const { expect } = chai;
 chai.use(chaiAsPromised);
 
-describe('Get items use case', () => {
+describe('Get teams use case', () => {
   let getTeamsUseCase: GetTeams;
   let teamRepository: InMemoryTeamRepository;
 
