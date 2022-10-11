@@ -5,6 +5,7 @@ export type Request = {
   query?: any,
   params?: any,
   headers?: any,
+  url?: string,
 };
 
 export type Response = {
@@ -23,11 +24,13 @@ const reqDefault: Request = {
   query: {},
   params: {},
   headers: {},
+  url: '/',
 }
 
 const testController = async (
   controller: any,
   request: Request = reqDefault,
+  err?: Error,
   ) => {
   const result: Result = {
     body: undefined,
@@ -55,9 +58,14 @@ const testController = async (
 
   const spyJson = sinon.spy(response, 'json');
   const spyStatus = sinon.spy(response, 'status');
+  const spyNext = sinon.spy(nextFunc);
 
   try {
-    await controller(request, response, nextFunc);
+    if (err) {
+      await controller(err, request, response, spyNext);
+    } else {
+      await controller(request, response, spyNext);
+    }
   } catch (error) {
     nextFunc(error);
   }
@@ -65,7 +73,7 @@ const testController = async (
 
   return {
     ...result,
-    spies: { json: spyJson, status: spyStatus },
+    spies: { json: spyJson, status: spyStatus, next: spyNext },
     ...nextArgs,
   };
 }

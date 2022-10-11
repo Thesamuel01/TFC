@@ -52,3 +52,9 @@ export const matchWithSameTeamIDs = {
   awayTeamGoals: 2,
   inProgress: true,
 }
+
+export const updateMatchData = {
+  id: 1,
+  homeTeamGoals: 3,
+  awayTeamGoals: 1
+}
