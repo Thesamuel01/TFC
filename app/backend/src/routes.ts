@@ -1,6 +1,5 @@
 import 'express-async-errors';
-import { NextFunction, Request, Response, Router } from 'express';
-import { StatusCodes } from 'http-status-codes';
+import { Router } from 'express';
 
 import {
   loginUserImplementation,
@@ -10,7 +9,7 @@ import {
   authControllerImplementation,
   updateMatchImplementation,
 } from './implementations';
-import HttpError from './implementations/express/helpers/http-status-error';
+import { ExpressErrorHandlerController } from './implementations/express';
 
 const router = Router();
 
@@ -23,21 +22,6 @@ router.post('/matches', authControllerImplementation.handle, createMatchImplemen
 router.patch('/matches/:id', updateMatchImplementation.handle);
 router.patch('/matches/:id/finish', updateMatchImplementation.handle);
 
-router.use((
-  err: HttpError | Error,
-  _req: Request,
-  res: Response,
-  _next: NextFunction,
-): Response => {
-  console.error(`${err.name}: ${err.message}`);
-
-  if (err instanceof HttpError) {
-    return res.status(err.statusCode).json({ message: err.message });
-  }
-
-  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-    message: 'Unexpect Error',
-  });
-});
+router.use(ExpressErrorHandlerController.handle);
 
 export default router;
