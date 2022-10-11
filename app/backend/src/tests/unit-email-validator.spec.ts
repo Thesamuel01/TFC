@@ -19,4 +19,11 @@ describe('Email validator', () => {
 
     expect(sut).to.be.be.equal(false);
   });
+
+  it('should return email value when call value', () => {
+    const email = 'test@test.com'
+    const sut = Email.create(email);
+
+    expect(sut.value).to.be.be.equal(email);
+  });
 });
