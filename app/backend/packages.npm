@@ -1,3 +1,4 @@
 chai-as-promised
 express-async-errors
 http-status-codes
+sinon-chai

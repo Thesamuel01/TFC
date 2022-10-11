@@ -52,7 +52,7 @@ export default class ExpressLoginController implements Controller<Request, Respo
       return res.status(StatusCodes.OK).json({ role });
     } catch (error) {
       if (error instanceof InvalidTokenError) {
-        return next(HttpError.unauthorized('Token expired'));
+        return next(HttpError.unauthorized('Token must be a valid token'));
       }
 
       if (error instanceof TokenExpiredError) {

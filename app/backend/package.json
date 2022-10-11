@@ -32,6 +32,7 @@
     "@types/node": "16.11.7",
     "@types/sequelize": "4.28.10",
     "@types/sinon": "10.0.11",
+    "@types/sinon-chai": "^3.2.8",
     "@types/validator": "13.6.6",
     "@typescript-eslint/eslint-plugin": "5.3.1",
     "@typescript-eslint/parser": "5.3.1",
@@ -49,6 +50,7 @@
     "nyc": "15.1.0",
     "sequelize-cli": "6.3.0",
     "sinon": "13.0.1",
+    "sinon-chai": "^3.7.0",
     "ts-node": "10.7.0",
     "ts-node-dev": "1.1.8",
     "typescript": "4.4.4"
