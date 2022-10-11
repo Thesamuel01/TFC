@@ -6,7 +6,7 @@ import { UserDataDTO } from '../DTOs/user-data-dto';
 import LoginUser from '../use-cases/login-user';
 import InMemoryUserRepository from '../repositories/in-memory/in-memory-user-repository';
 import { InvalidEmailError, InvalidPasswordError} from '../entities/errors';
-import { IncorrectEmailError, IncorrectPasswordError, InvalidTokenError, TokenExpiredError } from '../use-cases/errors';
+import { IncorrectEmailError, IncorrectPasswordError, InvalidTokenError, TokenExpiredError, UnknownError } from '../use-cases/errors';
 import { PasswordHashing, TokenHashing } from '../adapters';
 import { PasswordHashingAdapterMock, TokenHashingAdapterMock } from './mocks';
 import { TokenResult } from '../adapters/token-hashing'
@@ -168,6 +168,16 @@ describe('Login use case', () => {
       expect(() => {
         return loginUseCase.validate(sut)
       }).to.throw(TokenExpiredError);
+    });
+
+    it('should throw an error when an unexpected error occurs', () => {
+      const sut = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJpYXQiOjE2NjQ2MDU0MTMsImV4cCI6MTY2NDY5MTgxM30.eCXKY4gyIoTEdXVkvdpy825ux8icXNpr9Lr4s-eRBxU';
+
+      stub.callsFake((_token: string) => {})
+  
+      expect(() => {
+        return loginUseCase.validate(sut)
+      }).to.throw(UnknownError);
     });
   });
 })
