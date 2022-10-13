@@ -3,6 +3,7 @@ import GetTeams from './get-teams';
 import GetMatches from './get-matches';
 import CreateMatch from './create-match';
 import UpdateMatch from './update-match';
+import GetLeaderBoard from './get-leaderboard';
 
 export {
   GetTeams,
@@ -10,4 +11,5 @@ export {
   GetMatches,
   CreateMatch,
   UpdateMatch,
+  GetLeaderBoard,
 };
