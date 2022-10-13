@@ -1,3 +1,4 @@
+import { Match } from '../entities';
 import { CreateMatchDTO, MatchDataDTO } from '../DTOs';
 import { MatchRepository, TeamRepository } from '../repositories';
 import { EqualTeamsIDsError, NotFoundError } from './errors';
@@ -9,21 +10,24 @@ export default class CreateMatch {
   ) {}
 
   async execute(data: CreateMatchDTO): Promise<MatchDataDTO> {
-    if (data.homeTeam === data.awayTeam) {
-      throw new EqualTeamsIDsError();
-    }
+    if (data.homeTeam === data.awayTeam) throw new EqualTeamsIDsError();
 
-    return Promise.all([
-      this.teamRepository.findById(data.homeTeam),
-      this.teamRepository.findById(data.awayTeam),
-    ]).then((value) => {
-      const findMatches = value.every((match) => match);
+    const repo = this.teamRepository;
 
-      if (!findMatches) {
-        throw new NotFoundError();
-      }
+    return Promise
+      .all([repo.findById(data.homeTeam), repo.findById(data.awayTeam)])
+      .then(([homeTeam, awayTeam]) => {
+        if (!homeTeam || !awayTeam) throw new NotFoundError();
 
-      return this.matchRepository.create(data);
-    });
+        return this.matchRepository.insert(Match.create({
+          homeTeamId: homeTeam.id,
+          homeTeamName: homeTeam.teamName,
+          homeTeamGoals: data.homeTeamGoals,
+          awayTeamId: awayTeam.id,
+          awayTeamName: awayTeam.teamName,
+          awayTeamGoals: data.awayTeamGoals,
+          inProgress: data.inProgress,
+        }));
+      });
   }
 }

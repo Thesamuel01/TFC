@@ -5,13 +5,6 @@ export type UpdateMessage = {
   message: string,
 };
 
-// {
-//   id,
-//   homeTeamGoals,
-//   awayTeamGoals,
-//   inProgress,
-// }
-
 export default class UpdateMatch {
   constructor(
     private matchesRepository: MatchRepository,

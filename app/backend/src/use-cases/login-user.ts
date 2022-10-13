@@ -30,9 +30,7 @@ export default class LoginUser {
       throw new IncorrectEmailError();
     }
 
-    const isPasswordCorrect = this
-      .passwordHasing
-      .compare(data.password, userExists.password);
+    const isPasswordCorrect = this.passwordHasing.compare(data.password, userExists.password);
 
     if (!isPasswordCorrect) {
       throw new IncorrectPasswordError();

@@ -12,8 +12,7 @@ export default class GetMatches {
 
   async execute(data?: QueryString): Promise<MatchDataDTO[]> {
     if (data) {
-      const { inProgress } = data;
-      const params = { where: { inProgress } };
+      const params = { ...data };
 
       return this.matchesRepository.findAll(params);
     }
