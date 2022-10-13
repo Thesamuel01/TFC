@@ -9,34 +9,30 @@ const { expect } = chai;
 
 describe('Match domain entity', () => {
   it('should able to create a match', () => {
-    const homeTeam = Team.create({ id: 1, name: 'Corinthias' });
-    const awayTeam = Team.create({ id: 2, name: 'Palmeiras' });
-    const teamData: MatchData = {
-      homeTeam,
-      awayTeam,
+    const match = Match.create({
+      homeTeamId: 1,
+      homeTeamName: 'Corinthias',
       homeTeamGoals: 2,
+      awayTeamId: 2,
+      awayTeamName: 'Vasco',
       awayTeamGoals: 2,
-      inProgress: true 
-    }
-
-    const match = Match.create(teamData);
+      inProgress: true,
+    });
 
     expect(match).to.be.an.instanceof(Match);
   });
 
   it('should able to create a match when id already exist', () => {
-    const homeTeam = Team.create({ id: 1, name: 'Corinthias' });
-    const awayTeam = Team.create({ id: 2, name: 'Palmeiras' });
-    const teamData: MatchData = {
+    const match = Match.create({
       id: 1,
-      homeTeam,
-      awayTeam,
+      homeTeamId: 1,
+      homeTeamName: 'Corinthias',
       homeTeamGoals: 2,
+      awayTeamId: 2,
+      awayTeamName: 'Vasco',
       awayTeamGoals: 2,
-      inProgress: true 
-    }
-
-    const match = Match.create(teamData);
+      inProgress: true,
+    });
 
     expect(match).to.be.an.instanceof(Match);
   });

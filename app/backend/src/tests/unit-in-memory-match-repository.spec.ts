@@ -2,7 +2,8 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 
 import { InMemoryMatchRepository } from '../repositories/in-memory';
-import { matchesMockResult, newMatch, updateMatchData } from './mocks/matches-mock'
+import { matchesMockResult, updateMatchData } from './mocks/matches-mock'
+import { Match } from '../entities';
 // @ts-ignore
 const { expect } = chai;
 
@@ -38,7 +39,7 @@ describe('In memory match  repository', () => {
 
     it('should return an array of teams filter by in progress attr is true', async () => {
       const sut = new InMemoryMatchRepository();
-      const params = { where: { inProgress: true } };
+      const params = { inProgress: true };
       const result = await sut.findAll(params);
  
       expect(result).to.be.an('array');
@@ -47,7 +48,7 @@ describe('In memory match  repository', () => {
 
     it('should return an array of teams filter by in progress attr is false', async () => {
       const sut = new InMemoryMatchRepository();
-      const params = { where: { inProgress: false } };
+      const params = { inProgress: false };
       const result = await sut.findAll(params);
  
       expect(result).to.be.an('array');
@@ -58,9 +59,24 @@ describe('In memory match  repository', () => {
   describe('create', () => {
     it('should be able to search by ID and return team', async () => {
       const sut = new InMemoryMatchRepository();
-      const match = { id: 3, ...newMatch };    
+      const match = Match.create({
+        homeTeamId: 1,
+        homeTeamName: 'Corinthias',
+        homeTeamGoals: 2,
+        awayTeamId: 2,
+        awayTeamName: 'Vasco',
+        awayTeamGoals: 2,
+        inProgress: true,
+      });
   
-      await expect(sut.create(newMatch)).to.eventually.be.eql(match);
+      await expect(sut.insert(match)).to.eventually.be.eql({
+        id: 3,
+        homeTeam: 1,
+        homeTeamGoals: 2,
+        awayTeam: 2,
+        awayTeamGoals: 2,
+        inProgress: true,
+      });
       await expect(sut.findAll()).to.eventually.have.length(3);
     });
   });

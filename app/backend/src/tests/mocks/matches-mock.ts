@@ -30,9 +30,9 @@ export const matchesMockResult = [
 ];
 
 export const newMatch = {
-  homeTeam: 16,
+  homeTeam: 1,
   homeTeamGoals: 2,
-  awayTeam: 8,
+  awayTeam: 2,
   awayTeamGoals: 2,
   inProgress: true,
 }
