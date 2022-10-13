@@ -5,6 +5,7 @@ import ExpressGetMatchesController from './express-get-matches-controller';
 import ExpressCreateMatchController from './express-create-match-controller';
 import ExpressAuthController from './express-auth-controller';
 import ExpressUpdateMatchController from './express-update-match-controller';
+import ExpressGetLeaderBoardController from './express-get-leaderboard';
 
 export {
   ExpressLoginController,
@@ -14,4 +15,5 @@ export {
   ExpressCreateMatchController,
   ExpressAuthController,
   ExpressUpdateMatchController,
+  ExpressGetLeaderBoardController,
 };

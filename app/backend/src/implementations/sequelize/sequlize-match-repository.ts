@@ -1,15 +1,16 @@
 import { FindAllParams } from '../../repositories/match-repository';
 import MatchModel from '../../database/models/Match';
 import Team from '../../database/models/Team';
-import { MatchDataDTO, UpdateMatchDTO, CreateMatchDTO } from '../../DTOs';
+import { MatchDataDTO, UpdateMatchDTO } from '../../DTOs';
 import { MatchRepository } from '../../repositories';
+import { Match } from '../../entities';
 
 export default class SequelizeMatchReposiroty implements MatchRepository {
   constructor(private model = MatchModel) {}
 
   async findAll(params?: FindAllParams): Promise<MatchDataDTO[]> {
     const data = await this.model.findAll({
-      ...params,
+      where: { ...params },
       include: [
         { model: Team, as: 'teamHome', attributes: { exclude: ['id'] } },
         { model: Team, as: 'teamAway', attributes: { exclude: ['id'] } },
@@ -33,7 +34,15 @@ export default class SequelizeMatchReposiroty implements MatchRepository {
     );
   }
 
-  async create(data: CreateMatchDTO): Promise<MatchDataDTO> {
-    return this.model.create(data);
+  async insert(data: Match): Promise<MatchDataDTO> {
+    const { awayTeam, awayTeamGoals, homeTeam, homeTeamGoals, inProgress } = data;
+
+    return this.model.create({
+      awayTeam,
+      awayTeamGoals,
+      homeTeam,
+      homeTeamGoals,
+      inProgress,
+    });
   }
 }
