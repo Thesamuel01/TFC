@@ -1,4 +1,5 @@
-import { CreateMatchDTO, MatchDataDTO, UpdateMatchDTO } from '../../DTOs';
+import { Match } from '../../entities';
+import { MatchDataDTO, UpdateMatchDTO } from '../../DTOs';
 import { FindAllParams, MatchRepository } from '../match-repository';
 
 export default class InMemoryMatchRepository implements MatchRepository {
@@ -35,7 +36,7 @@ export default class InMemoryMatchRepository implements MatchRepository {
 
   async findAll(params?: FindAllParams | undefined): Promise<MatchDataDTO[]> {
     if (params) {
-      const { where: { inProgress } } = params;
+      const { inProgress } = params;
       const result = this.matches.filter((data) => data.inProgress === inProgress);
 
       return result;
@@ -64,8 +65,17 @@ export default class InMemoryMatchRepository implements MatchRepository {
     });
   }
 
-  async create(data: CreateMatchDTO): Promise<MatchDataDTO> {
-    const matchCreated = { id: this.matches.length + 1, ...data };
+  async insert(data: Match): Promise<MatchDataDTO> {
+    const { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals, inProgress } = data;
+    const id = this.matches.length + 1;
+    const matchCreated = {
+      id,
+      homeTeam,
+      homeTeamGoals,
+      awayTeam,
+      awayTeamGoals,
+      inProgress,
+    };
 
     this.matches.push(matchCreated);
 
