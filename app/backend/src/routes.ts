@@ -8,6 +8,7 @@ import {
   createMatchImplementation,
   authControllerImplementation,
   updateMatchImplementation,
+  getLeaderBoardImplementation,
 } from './implementations';
 import { ExpressErrorHandlerController } from './implementations/express';
 
@@ -21,6 +22,9 @@ router.get('/matches', getMatchesImplementation.handle);
 router.post('/matches', authControllerImplementation.handle, createMatchImplementation.handle);
 router.patch('/matches/:id', updateMatchImplementation.handle);
 router.patch('/matches/:id/finish', updateMatchImplementation.handle);
+router.get('/leaderboard', getLeaderBoardImplementation.handle);
+router.get('/leaderboard/away', getLeaderBoardImplementation.handle);
+router.get('/leaderboard/home', getLeaderBoardImplementation.handle);
 
 router.use(ExpressErrorHandlerController.handle);
 
