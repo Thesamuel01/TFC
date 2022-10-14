@@ -9,12 +9,17 @@ implements Controller<Request, Response, NextFunction> {
     private getLeaderBoardUseCase: GetLeaderBoard,
   ) {}
 
-  handle = async (req: Request, res: Response, _next: NextFunction): Promise<Response | void> => {
-    const regex = /(away)|(home)/;
-    const hasFilter = regex.exec(req.url);
-    const teamCategory = hasFilter ? hasFilter[0] : undefined;
-    const result = await this.getLeaderBoardUseCase.execute(teamCategory);
+  handle = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+    try {
+      const regex = /(away)|(home)/;
+      const hasFilter = regex.exec(req.url);
+      const teamCategory = hasFilter ? hasFilter[0] : undefined;
+      const result = await this.getLeaderBoardUseCase.execute(teamCategory);
 
-    return res.status(StatusCodes.OK).json(result);
+      return res.status(StatusCodes.OK).json(result);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
   };
 }
