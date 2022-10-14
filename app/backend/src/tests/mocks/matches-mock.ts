@@ -1,32 +1,46 @@
 export const matchesMockResult = [
   {
     id: 1,
-    homeTeam: 16,
+    homeTeam: 3,
     homeTeamGoals: 1,
-    awayTeam: 8,
+    awayTeam: 4,
     awayTeamGoals: 1,
     inProgress: false,
     teamHome: {
-      teamName: 'São Paulo'
+      teamName: 'São Paulo',
     },
     teamAway: {
-      teamName: 'Grêmio'
-    }
+      teamName: 'Grêmio',
+    },
   },
   {
     id: 2,
-    homeTeam: 16,
+    homeTeam: 1,
     homeTeamGoals: 2,
-    awayTeam: 9,
+    awayTeam: 5,
     awayTeamGoals: 0,
-    inProgress: true,
+    inProgress: false,
     teamHome: {
-      teamName: 'São Paulo'
+      teamName: 'Corinthians',
     },
     teamAway: {
-      teamName: 'Internacional'
-    }
-  }
+      teamName: 'Internacional',
+    },
+  },
+  {
+    id: 1,
+    homeTeam: 2,
+    homeTeamGoals: 3,
+    awayTeam: 4,
+    awayTeamGoals: 2,
+    inProgress: true,
+    teamHome: {
+      teamName: 'Vasco',
+    },
+    teamAway: {
+      teamName: 'Grêmio',
+    },
+  },
 ];
 
 export const newMatch = {
@@ -46,9 +60,9 @@ export const matchWithAnInvalidTeamID = {
 }
 
 export const matchWithSameTeamIDs = {
-  homeTeam: 8,
+  homeTeam: 1,
   homeTeamGoals: 2,
-  awayTeam: 8,
+  awayTeam: 1,
   awayTeamGoals: 2,
   inProgress: true,
 }

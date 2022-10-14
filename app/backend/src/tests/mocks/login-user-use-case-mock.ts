@@ -1,9 +1,9 @@
 import { ITokenPayload } from "../../adapters/token-hashing"
-import { LoginUserRequestDTO } from "../../DTOs"
-import LoginUser, { LoginUserResponse } from "../../use-cases/login-user"
+import { LoginUserRequestDTO, TokenDTO } from "../../DTOs"
+import { LoginUser } from "../../use-cases"
 
 export const loginUserUseCase = {
-  async execute(data: LoginUserRequestDTO): Promise<LoginUserResponse> {
+  async execute(data: LoginUserRequestDTO): Promise<TokenDTO> {
     return {
       token: 'asdasdadad'
     }
