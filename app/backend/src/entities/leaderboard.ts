@@ -40,6 +40,8 @@ export default class LeaderBoard {
   }
 
   public get efficiency(): string {
+    if (!this.totalGames) return '0.00';
+
     const value = this.totalPoints / (this.totalGames * 3);
     const percentageResult = (value * 100).toFixed(2);
 
@@ -77,26 +79,67 @@ export default class LeaderBoard {
     return new LeaderBoard({ ...props });
   }
 
-  static calcGamesResult({ id }: Team, matches: MatchDataDTO[]) {
-    const totalDraws = matches
-      .filter(({ awayTeamGoals, homeTeamGoals }) => awayTeamGoals === homeTeamGoals).length;
-    const totalVictories = matches
-      .filter(({ homeTeam, awayTeamGoals, homeTeamGoals }) => {
-        if (homeTeam === id) return homeTeamGoals > awayTeamGoals;
+  private static getTeamMatchesGames(
+    id: number,
+    matches: MatchDataDTO[],
+  ): [number, MatchDataDTO[]] {
+    const teamMatches = matches.filter((data) => [data.awayTeam, data.homeTeam].includes(id));
 
-        return awayTeamGoals > homeTeamGoals;
-      }).length;
-    const totalLosses = matches.length - totalVictories - totalDraws;
+    return [teamMatches.length, teamMatches];
+  }
+
+  private static getTeamTotalDraws(
+    matches: MatchDataDTO[],
+  ): [number, MatchDataDTO[]] {
+    const teamDraws = matches
+      .filter(({ awayTeamGoals, homeTeamGoals }) => awayTeamGoals === homeTeamGoals);
+
+    return [teamDraws.length, teamDraws];
+  }
+
+  private static getTeamTotalVictories(
+    id: number,
+    matches: MatchDataDTO[],
+  ): [number, MatchDataDTO[]] {
+    const teamVictories = matches.filter(({ homeTeam, awayTeamGoals, homeTeamGoals }) => {
+      if (homeTeam === id) return homeTeamGoals > awayTeamGoals;
+
+      return awayTeamGoals > homeTeamGoals;
+    });
+
+    return [teamVictories.length, teamVictories];
+  }
+
+  private static getTeamTotalLosses(
+    id: number,
+    matches: MatchDataDTO[],
+  ): [number, MatchDataDTO[]] {
+    const teamVictories = matches.filter(({ homeTeam, awayTeamGoals, homeTeamGoals }) => {
+      if (homeTeam === id) return homeTeamGoals < awayTeamGoals;
+
+      return awayTeamGoals < homeTeamGoals;
+    });
+
+    return [teamVictories.length, teamVictories];
+  }
+
+  public static calcGamesResult({ id }: Team, matches: MatchDataDTO[]) {
+    const [totalGames, teamMatches] = this.getTeamMatchesGames(id, matches);
+    const [totalDraws] = this.getTeamTotalDraws(teamMatches);
+    const [totalVictories] = this.getTeamTotalVictories(id, teamMatches);
+    const [totalLosses] = this.getTeamTotalLosses(id, teamMatches);
 
     return {
+      totalGames,
       totalVictories,
       totalDraws,
       totalLosses,
     };
   }
 
-  static calcGoalsAmount({ id }: Team, matches: MatchDataDTO[]) {
-    const result = matches
+  public static calcGoalsAmount({ id }: Team, matches: MatchDataDTO[]) {
+    const [, teamMatches] = this.getTeamMatchesGames(id, matches);
+    const result = teamMatches
       .reduce((acc, { homeTeam, homeTeamGoals, awayTeamGoals }) => {
         if (homeTeam === id) {
           acc.goalsFavor += homeTeamGoals;

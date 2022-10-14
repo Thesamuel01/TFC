@@ -14,18 +14,17 @@ export default class GetLeaderBoard {
     const finishedMatches = await this.matchesRepository.findAll({ inProgress: false });
 
     const result = teams.map((team) => {
-      const matches = finishedMatches.filter((data) => {
+      const matches = category ? finishedMatches.filter((data) => {
         if (category === 'away') return data.awayTeam === team.id;
-        if (category === 'home') return data.homeTeam === team.id;
 
-        return [data.awayTeam, data.homeTeam].includes(team.id);
-      });
+        return data.homeTeam === team.id;
+      }) : finishedMatches;
+
       const name = team.teamName;
-      const totalGames = matches.length;
       const gamesResult = LeaderBoard.calcGamesResult(team, matches);
       const goalsAmount = LeaderBoard.calcGoalsAmount(team, matches);
 
-      return LeaderBoard.create({ name, totalGames, ...gamesResult, ...goalsAmount });
+      return LeaderBoard.create({ name, ...gamesResult, ...goalsAmount });
     });
 
     return result
