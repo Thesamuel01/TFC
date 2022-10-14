@@ -1,8 +1,6 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
 import { Response } from 'superagent';
-import 'dotenv/config'
-
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
@@ -26,7 +24,7 @@ describe('Update matches integration test', () => {
       (Match.update as sinon.SinonStub).restore();
     })
 
-    it('should be able to update an in progress match, return status code 200 and a message', async () => {
+    it('should be able to update in progress match, return status code 200 and a message', async () => {
       chaiHttpResponse = await chai
         .request(app)
         .patch('/matches/1')

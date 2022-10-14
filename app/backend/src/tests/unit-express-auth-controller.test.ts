@@ -1,6 +1,5 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
-import { afterEach, beforeEach } from 'mocha';
 import * as sinonChai from 'sinon-chai';
 import 'dotenv/config';
 
@@ -10,7 +9,6 @@ import { InvalidTokenError, TokenExpiredError, UnknownError } from '../use-cases
 import testController from './helpers/controllerTest';
 import HttpError from '../implementations/express/helpers/http-status-error';
 
-// @ts-ignore
 const { expect } = chai;
 chai.use(sinonChai)
 
@@ -51,7 +49,7 @@ describe('Express auth controller implementation', () => {
         .to.have.property('message', 'Token not found');
     });
 
-    it('should pass a http error to error handler middleware when there is no token', async () => {
+    it('should pass a http error to error handler middleware when token is invalid', async () => {
       stub.throws(new InvalidTokenError());
 
       const headers = { authorization: 'invalid_token'}

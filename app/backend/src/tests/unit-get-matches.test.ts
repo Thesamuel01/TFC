@@ -11,15 +11,14 @@ chai.use(chaiAsPromised);
 
 describe('Get matches use case', () => {
   let getMatchesUseCase: GetMatches;
-  let matchRepository: InMemoryMatchRepository;
 
   before(() => {
-    matchRepository = new InMemoryMatchRepository();
+    const matchRepository = new InMemoryMatchRepository();
     getMatchesUseCase = new GetMatches(matchRepository);
   });
 
   describe('execute', () => {
-    it('should return an array of matches when is not receveid an param', async () => {
+    it('should return an array of matches when is not receveid any param', async () => {
       const sut = await getMatchesUseCase.execute();
       const matches = [ ...matchesMockResult ];
       

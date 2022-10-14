@@ -1,9 +1,6 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
 import { Response } from 'superagent';
-import { sign } from 'jsonwebtoken';
-import 'dotenv/config'
-
 // @ts-ignore
 import chaiHttp = require('chai-http');
 

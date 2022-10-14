@@ -1,10 +1,8 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
 
-import Match, { MatchData } from '../entities/match';
-import Team from '../entities/team';
+import Match from '../entities/match';
 
-// @ts-ignore
 const { expect } = chai;
 
 describe('Match domain entity', () => {
@@ -20,6 +18,13 @@ describe('Match domain entity', () => {
     });
 
     expect(match).to.be.an.instanceof(Match);
+    expect(match.awayTeam).to.be.equal(2);
+    expect(match.awayTeamGoals).to.be.equal(2);
+    expect(match.homeTeam).to.be.equal(1);
+    expect(match.homeTeamGoals).to.be.equal(2);
+    expect(match.inProgress).to.be.equal(true);
+    expect(match.teamAway.teamName).to.be.equal('Vasco');
+    expect(match.teamHome.teamName).to.be.equal('Corinthias');
   });
 
   it('should able to create a match when id already exist', () => {
@@ -35,5 +40,12 @@ describe('Match domain entity', () => {
     });
 
     expect(match).to.be.an.instanceof(Match);
+    expect(match.awayTeam).to.be.equal(2);
+    expect(match.awayTeamGoals).to.be.equal(2);
+    expect(match.homeTeam).to.be.equal(1);
+    expect(match.homeTeamGoals).to.be.equal(2);
+    expect(match.inProgress).to.be.equal(true);
+    expect(match.teamAway.teamName).to.be.equal('Vasco');
+    expect(match.teamHome.teamName).to.be.equal('Corinthias');
   });
 });

@@ -1,11 +1,13 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
+import * as chaiAsPromised from 'chai-as-promised';
 
 import { InMemoryMatchRepository } from '../repositories/in-memory';
 import { matchesMockResult, updateMatchData } from './mocks/matches-mock'
 import { Match } from '../entities';
-// @ts-ignore
+
 const { expect } = chai;
+chai.use(chaiAsPromised);
 
 describe('In memory match  repository', () => {
   describe('findByPk', () => {
@@ -56,9 +58,10 @@ describe('In memory match  repository', () => {
     });
   });
 
-  describe('create', () => {
-    it('should be able to search by ID and return team', async () => {
+  describe('insert', () => {
+    it('should be to insert a match and return it', async () => {
       const sut = new InMemoryMatchRepository();
+      const id = matchesMockResult.length + 1;
       const match = Match.create({
         homeTeamId: 1,
         homeTeamName: 'Corinthias',
@@ -70,14 +73,14 @@ describe('In memory match  repository', () => {
       });
   
       await expect(sut.insert(match)).to.eventually.be.eql({
-        id: 3,
+        id,
         homeTeam: 1,
         homeTeamGoals: 2,
         awayTeam: 2,
         awayTeamGoals: 2,
         inProgress: true,
       });
-      await expect(sut.findAll()).to.eventually.have.length(3);
+      await expect(sut.findAll()).to.eventually.have.length(4);
     });
   });
 

@@ -3,7 +3,7 @@ import * as chai from 'chai';
 
 import { User } from '../entities';
 import { UserDataDTO } from '../DTOs';
-// @ts-ignore
+
 const { expect } = chai;
 
 describe('User domain entity', () => {

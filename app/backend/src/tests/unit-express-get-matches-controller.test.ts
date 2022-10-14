@@ -1,36 +1,33 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
-import { afterEach, beforeEach } from 'mocha';
+import * as sinonChai from 'sinon-chai';
 import 'dotenv/config';
 
 import { ExpressGetMatchesController } from '../implementations/express';
 import { GetMatches } from '../use-cases';
 import { InMemoryMatchRepository } from '../repositories/in-memory'
-import testController from './helpers/controllerTest';
-import HttpError from '../implementations/express/helpers/http-status-error';
-import { NotFoundError } from '../use-cases/errors';
 import { matchesMockResult } from './mocks/matches-mock';
+import HttpError from '../implementations/express/helpers/http-status-error';
+import testController from './helpers/controllerTest';
 
-
-// @ts-ignore
 const { expect } = chai;
+chai.use(sinonChai);
 
 describe('Express get matches controller implementation', () => {
   describe('handle', () => {
     let stub: sinon.SinonStub;
-    let InMemoryMatchRepository: InMemoryMatchRepository;
     let getMatchesUseCase: GetMatches;
     
     beforeEach(() => {
-      InMemoryMatchRepository = InMemoryMatchRepository
-      getMatchesUseCase = new GetMatches(InMemoryMatchRepository);
+      const inMemoryMatchRepository = new InMemoryMatchRepository()
+      getMatchesUseCase = new GetMatches(inMemoryMatchRepository);
 
       stub = sinon.stub(getMatchesUseCase, 'execute');
     });
 
     afterEach(() => stub.restore());
 
-    it('should return status code 200 and all matches whan no query param is received', async () => {
+    it('should return status code 200 and all matches when no query param is received', async () => {
       const matches = [...matchesMockResult]
       stub.resolves(matches);
 
@@ -44,7 +41,7 @@ describe('Express get matches controller implementation', () => {
     });
 
     it('should return status code 200 and all matches in progress when no query param inProgress=true is received', async () => {
-      const matches = [matchesMockResult[1]];
+      const matches = [matchesMockResult[2]];
       stub.resolves(matches);
 
       const sut = new ExpressGetMatchesController(getMatchesUseCase);

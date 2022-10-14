@@ -8,7 +8,6 @@ import { UpdateMatch } from '../use-cases';
 import { InMemoryMatchRepository} from '../repositories/in-memory'
 import testController from './helpers/controllerTest';
 
-// @ts-ignore
 const { expect } = chai;
 chai.use(sinonChai)
 

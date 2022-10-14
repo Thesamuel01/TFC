@@ -2,8 +2,6 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 import { Response } from 'superagent';
 import { sign } from 'jsonwebtoken';
-import 'dotenv/config'
-
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
@@ -42,7 +40,7 @@ describe('Create matches integration test', () => {
       findByPkStub.restore();
     });
 
-    it('should be able to create a match, return status code 201 and the match created data', async () => {
+    it('should be able to create a match, return status code 201 and the match created', async () => {
       findByPkStub.resolves({ ...matchesMockResult[0] })
   
       chaiHttpResponse = await chai
@@ -59,7 +57,7 @@ describe('Create matches integration test', () => {
       expect(chaiHttpResponse.body).to.have.all.keys(keys);
     });
 
-    it('should not be able to create a match when token request is not received', async () => {
+    it('should not be able to create a match when token is not received', async () => {
       chaiHttpResponse = await chai
         .request(app)
         .post('/matches')
@@ -72,7 +70,7 @@ describe('Create matches integration test', () => {
         .to.be.equal('Token not found');
     });
 
-    it('should not be able to create a match when token request is invalid', async () => {
+    it('should not be able to create a match when token is invalid', async () => {
       chaiHttpResponse = await chai
         .request(app)
         .post('/matches')
@@ -102,7 +100,7 @@ describe('Create matches integration test', () => {
         .to.be.equal('There is no team with such id!');
     });
 
-    it('should not be able to create a match when both team IDs are the same', async () => {
+    it('should not be able to create a match when both team IDs are equals', async () => {
       chaiHttpResponse = await chai
         .request(app)
         .post('/matches')

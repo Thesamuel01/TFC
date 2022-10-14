@@ -1,11 +1,12 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
+import * as chaiAsPromised from 'chai-as-promised';
 
 import { SequelizeTeamRpository } from '../implementations/sequelize'
 import Team from '../database/models/Team';
 
-// @ts-ignore
 const { expect } = chai;
+chai.use(chaiAsPromised);
 
 describe('Sequelize user repository implementation', () => {
   let stubAll: sinon.SinonStub;

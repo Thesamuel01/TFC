@@ -2,7 +2,7 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 
 import Team, { TeamData } from '../entities/team';
-// @ts-ignore
+
 const { expect } = chai;
 
 describe('Team domain entity', () => {

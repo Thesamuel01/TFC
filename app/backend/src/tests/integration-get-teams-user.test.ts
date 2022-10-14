@@ -1,12 +1,11 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
+import { Response } from 'superagent';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import Team from '../database/models/Team';
-
-import { Response } from 'superagent';
 
 chai.use(chaiHttp);
 
@@ -64,7 +63,7 @@ describe('Get teams integration test', () => {
       expect(chaiHttpResponse.body).to.be.have.property('teamName', 'Avaí/Kindermann');
     });
   
-    it('should return a status code 400 and an error message id param is not a number',async () => {
+    it('should return a status code 400 and an error message when request param is not a number',async () => {
       stub.resolves({id: 1, teamName: 'Avaí/Kindermann'} as Team);
 
       chaiHttpResponse = await chai
@@ -80,7 +79,7 @@ describe('Get teams integration test', () => {
     });
 
 
-    it('should return a status code 404 and an error message when team is not found',async () => {
+    it('should return a status code 404 and an error message when the team is not found',async () => {
       stub.resolves(null);
 
       chaiHttpResponse = await chai

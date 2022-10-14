@@ -6,14 +6,13 @@ import 'dotenv/config';
 import { ExpressCreateMatchController } from '../implementations/express';
 import { CreateMatch } from '../use-cases';
 import { InMemoryTeamRepository, InMemoryMatchRepository} from '../repositories/in-memory'
-import testController from './helpers/controllerTest';
-import { EqualTeamsIDsError, NotFoundError, UnknownError } from '../use-cases/errors';
-import HttpError from '../implementations/express/helpers/http-status-error';
+import { EqualTeamsIDsError, NotFoundError } from '../use-cases/errors';
 import { newMatch, matchWithAnInvalidTeamID, matchWithSameTeamIDs } from './mocks/matches-mock';
+import HttpError from '../implementations/express/helpers/http-status-error';
+import testController from './helpers/controllerTest';
 
-// @ts-ignore
 const { expect } = chai;
-chai.use(sinonChai)
+chai.use(sinonChai);
 
 describe('Express get teams controller implementation', () => {
   let stub: sinon.SinonStub;
@@ -32,7 +31,7 @@ describe('Express get teams controller implementation', () => {
   });
 
   describe('handle', () => {
-    it('should be able to create an match and return a status code and the match created', async () => {
+    it('should be able to create a match, return status code 201 and the match created', async () => {
       const createdMatch = { id: 1, ...newMatch }
       stub.resolves(createdMatch);
 

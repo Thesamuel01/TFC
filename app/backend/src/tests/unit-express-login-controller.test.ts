@@ -1,18 +1,17 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
-import { afterEach, beforeEach } from 'mocha';
+import * as sinonChai from 'sinon-chai';
 import 'dotenv/config';
 
 import { ExpressLoginController } from '../implementations/express';
 import { LoginUserRequestDTO } from '../DTOs';
 import { loginUserUseCase } from './mocks/login-user-use-case-mock';
-import testController from './helpers/controllerTest';
-import HttpError from '../implementations/express/helpers/http-status-error';
-import { InvalidEmailError, InvalidPasswordError } from '../entities/errors';
 import { IncorrectEmailError, IncorrectPasswordError, InvalidTokenError, TokenExpiredError, UnknownError } from '../use-cases/errors';
+import HttpError from '../implementations/express/helpers/http-status-error';
+import testController from './helpers/controllerTest';
 
-// @ts-ignore
 const { expect } = chai;
+chai.use(sinonChai);
 
 describe('Express login user controller implementation', () => {
   describe('handle', () => {
@@ -21,7 +20,7 @@ describe('Express login user controller implementation', () => {
     beforeEach(() => stub = sinon.stub(loginUserUseCase, 'execute'));
     afterEach(() => stub.restore());
 
-    it('should pass a http error to error handler middleware when there is no email field or is blank', async () => {
+    it('should throw an error when there is no email field or is blank', async () => {
       stub.restore();
 
       const sut = new ExpressLoginController(loginUserUseCase);
@@ -31,10 +30,13 @@ describe('Express login user controller implementation', () => {
   
       const result = await testController(sut.handle, { body });
 
-      expect(result.error).to.be.instanceOf(HttpError);
+      expect(result.spies.next).to.have.been.called;
+      expect(result.error)
+        .to.be.instanceOf(HttpError)
+        .and.to.have.deep.property('message', 'All fields must be filled');
     });
 
-    it('should pass a http error to error handler middleware when there is no password field or is blank', async () => {
+    it('should throw an error when there is no password field or is blank', async () => {
       stub.restore();
 
       const sut = new ExpressLoginController(loginUserUseCase);
@@ -44,7 +46,10 @@ describe('Express login user controller implementation', () => {
   
       const result = await testController(sut.handle, { body });
       
-      expect(result.error).to.be.instanceOf(HttpError);
+      expect(result.spies.next).to.have.been.called;
+      expect(result.error)
+        .to.be.instanceOf(HttpError)
+        .and.to.have.deep.property('message', 'All fields must be filled');
     });
 
     it('should return status code 200 and a token', async () => {
@@ -75,7 +80,10 @@ describe('Express login user controller implementation', () => {
   
       const result = await testController(sut.handle, { body });
       
-      expect(result.error).to.be.instanceOf(HttpError);
+      expect(result.spies.next).to.have.been.called;
+      expect(result.error)
+        .to.be.instanceOf(HttpError)
+        .and.to.have.deep.property('message', 'Incorrect email or password');
     });
 
     it('should pass an error to error handler middleware when password is incorrect error is threw', async () => {
@@ -89,36 +97,12 @@ describe('Express login user controller implementation', () => {
   
       const result = await testController(sut.handle, { body });
 
-      expect(result.error).to.be.instanceOf(HttpError);
+      expect(result.spies.next).to.have.been.called;
+      expect(result.error)
+        .to.be.instanceOf(HttpError)
+        .and.to.have.deep.property('message', 'Incorrect email or password');
     });
 
-    it('should pass an error to error handler middleware when an invalid email error is threw', async () => {
-      stub.rejects(new InvalidEmailError());
-
-      const sut = new ExpressLoginController(loginUserUseCase);
-      const body: LoginUserRequestDTO = {
-        email: 'test_test.com',
-        password: 'my_secret_password',
-      }
-
-      const result = await testController(sut.handle, { body });
-
-      expect(result.error).to.be.instanceOf(HttpError);
-    });
-
-    it('should pass an error to error handler middleware when an invalid password error is threw', async () => {
-      stub.rejects(new InvalidPasswordError());
-
-      const sut = new ExpressLoginController(loginUserUseCase);
-      const body: LoginUserRequestDTO = {
-        email: 'test_test.com',
-        password: 'my_',
-      }
-
-      const result = await testController(sut.handle, { body });
-
-      expect(result.error).to.be.instanceOf(HttpError);
-    });
 
     it('should pass an error to error handler middleware when a unknown error happen', async () => {
       stub.rejects(new UnknownError());
@@ -132,6 +116,7 @@ describe('Express login user controller implementation', () => {
       const result = await testController(sut.handle, { body });
 
       expect(result.error).to.be.instanceOf(Error);
+      expect(result.spies.next).to.have.been.called;
     });
 });
 

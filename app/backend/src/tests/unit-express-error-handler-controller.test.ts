@@ -1,13 +1,14 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
+import * as sinonChai from 'sinon-chai';
 import 'dotenv/config';
 
 import { ExpressErrorHandlerController } from '../implementations/express';
 import testController from './helpers/controllerTest';
 import HttpError from '../implementations/express/helpers/http-status-error';
 
-// @ts-ignore
 const { expect } = chai;
+chai.use(sinonChai);
 
 describe('Express error handler controller implementation', () => {
   describe('handle', () => {

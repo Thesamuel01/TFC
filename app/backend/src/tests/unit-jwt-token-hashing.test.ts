@@ -6,7 +6,6 @@ import 'dotenv/config';
 import JWTTokenHashing from '../implementations/jwt'
 import { ITokenPayload } from '../adapters/token-hashing';
 
-// @ts-ignore
 const { expect } = chai;
 
 describe('JWT Implementation', () => {

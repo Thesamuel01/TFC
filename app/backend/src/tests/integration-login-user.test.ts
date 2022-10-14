@@ -1,12 +1,11 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
+import { Response } from 'superagent';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import User from '../database/models/User';
-
-import { Response } from 'superagent';
 
 chai.use(chaiHttp);
 
@@ -116,7 +115,7 @@ describe('Login integration test', () => {
         .to.be.equal('All fields must be filled');
     });
 
-    it('should return a status code 400 and an error message when email is in an invalid format',async () => {
+    it('should return a status code 400 and an error message when email is in invalid format',async () => {
       chaiHttpResponse = await chai
         .request(app)
         .post('/login')

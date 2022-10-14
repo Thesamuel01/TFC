@@ -4,30 +4,26 @@ import * as chaiAsPromised from 'chai-as-promised';
 
 import { GetTeams } from '../use-cases';
 import { InMemoryTeamRepository } from '../repositories/in-memory'
-import { Team } from '../entities';
 import { NotFoundError } from '../use-cases/errors';
-
-// @ts-ignore
+import { teamsMock } from './mocks/teams-mock';
 
 const { expect } = chai;
 chai.use(chaiAsPromised);
 
 describe('Get teams use case', () => {
   let getTeamsUseCase: GetTeams;
-  let teamRepository: InMemoryTeamRepository;
 
   before(() => {
-    teamRepository = new InMemoryTeamRepository();
+    const teamRepository = new InMemoryTeamRepository();
     getTeamsUseCase = new GetTeams(teamRepository);
   });
 
   describe('Without ID', () => {
     it('should return an array of teams', async () => {
       const sut = await getTeamsUseCase.execute();
-      const teams: Team[] = [{id: 1, teamName: 'Corinthias'}, { id: 2, teamName: 'Vasco' }];
       
       expect(sut).to.be.a('array');
-      expect(sut).to.have.deep.ordered.members(teams);
+      expect(sut).to.have.deep.ordered.members(teamsMock);
     });
   });
 
@@ -43,7 +39,7 @@ describe('Get teams use case', () => {
       expect(sut)
         .to.have.property('teamName')
         .to.be.a('string')
-        .to.be.equal('Corinthias');
+        .to.be.equal('Corinthians');
     });
 
     it('should throw an error when team is not found', async () => {

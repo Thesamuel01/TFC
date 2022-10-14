@@ -1,27 +1,25 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
-import { afterEach, beforeEach } from 'mocha';
+import * as sinonChai from 'sinon-chai';
 import 'dotenv/config';
 
 import { ExpressGetTeamsController } from '../implementations/express';
 import { GetTeams } from '../use-cases';
 import { InMemoryTeamRepository } from '../repositories/in-memory'
-import testController from './helpers/controllerTest';
-import HttpError from '../implementations/express/helpers/http-status-error';
 import { NotFoundError } from '../use-cases/errors';
+import HttpError from '../implementations/express/helpers/http-status-error';
+import testController from './helpers/controllerTest';
 
-
-// @ts-ignore
 const { expect } = chai;
+chai.use(sinonChai);
 
 describe('Express get teams controller implementation', () => {
   describe('handle', () => {
     let stub: sinon.SinonStub;
-    let inMemoryTeamRepository: InMemoryTeamRepository;
     let getTeamsUseCase: GetTeams;
     
     beforeEach(() => {
-      inMemoryTeamRepository = new InMemoryTeamRepository()
+      const inMemoryTeamRepository = new InMemoryTeamRepository()
       getTeamsUseCase = new GetTeams(inMemoryTeamRepository);
 
       stub = sinon.stub(getTeamsUseCase, 'execute');
@@ -29,7 +27,7 @@ describe('Express get teams controller implementation', () => {
 
     afterEach(() => stub.restore());
 
-    it('should return status code 200 and an teams array', async () => {
+    it('should return status code 200 and teams array', async () => {
       const teams = [{id: 1, teamName: 'Corinthias'}, { id: 2, teamName: 'Vasco' }];
       stub.resolves(teams);
 
@@ -41,7 +39,7 @@ describe('Express get teams controller implementation', () => {
         .to.have.deep.ordered.members(teams);
     });
 
-    it('should return status code 200 and a team when an Id is received by params', async () => {
+    it('should return status code 200 and a team when Id is received by params', async () => {
       stub.resolves({id: 1, teamName: 'Corinthias'});
 
       const sut = new ExpressGetTeamsController(getTeamsUseCase);
@@ -59,6 +57,7 @@ describe('Express get teams controller implementation', () => {
       const sut = new ExpressGetTeamsController(getTeamsUseCase);
       const result = await testController(sut.handle, { params: { id: '90' } });
 
+      expect(result.spies.next).to.have.been.called;
       expect(result.error)
         .to.be.instanceOf(HttpError)
         .to.have.property('message')
@@ -71,6 +70,7 @@ describe('Express get teams controller implementation', () => {
       const sut = new ExpressGetTeamsController(getTeamsUseCase);
       const result = await testController(sut.handle, { params: { id: 'test' } });
 
+      expect(result.spies.next).to.have.been.called;
       expect(result.error)
         .to.be.instanceOf(HttpError)
         .to.have.property('message')

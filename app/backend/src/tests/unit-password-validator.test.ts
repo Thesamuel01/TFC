@@ -2,7 +2,7 @@ import * as sinon from 'sinon';
 import * as chai from 'chai';
 
 import { Password } from '../entities';
-// @ts-ignore
+
 const { expect } = chai;
 
 describe('Password validator', () => {

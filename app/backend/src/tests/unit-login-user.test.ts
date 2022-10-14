@@ -3,28 +3,26 @@ import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 
 import { UserDataDTO } from '../DTOs/user-data-dto';
-import LoginUser from '../use-cases/login-user';
-import InMemoryUserRepository from '../repositories/in-memory/in-memory-user-repository';
+import { InMemoryUserRepository } from '../repositories/in-memory';
 import { InvalidEmailError, InvalidPasswordError} from '../entities/errors';
 import { IncorrectEmailError, IncorrectPasswordError, InvalidTokenError, TokenExpiredError, UnknownError } from '../use-cases/errors';
-import { PasswordHashing, TokenHashing } from '../adapters';
+import { TokenHashing } from '../adapters';
 import { PasswordHashingAdapterMock, TokenHashingAdapterMock } from './mocks';
 import { TokenResult } from '../adapters/token-hashing'
-// @ts-ignore
+import { LoginUser } from '../use-cases';
 
 const { expect } = chai;
 chai.use(chaiAsPromised);
 
 describe('Login use case', () => {
-  let userRepository: InMemoryUserRepository;
   let tokenHashingAdapter: TokenHashing;
-  let passwordHasingAdapter: PasswordHashing;
   let loginUseCase: LoginUser;
   
   before(() => {
-    userRepository = new InMemoryUserRepository()
+    const userRepository = new InMemoryUserRepository()
+    const passwordHasingAdapter = new PasswordHashingAdapterMock();
+
     tokenHashingAdapter = new TokenHashingAdapterMock()
-    passwordHasingAdapter = new PasswordHashingAdapterMock();
     loginUseCase = new LoginUser(
       userRepository,
       tokenHashingAdapter,

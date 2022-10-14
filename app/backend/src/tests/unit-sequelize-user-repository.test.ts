@@ -1,12 +1,13 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
+import * as chaiAsPromised from 'chai-as-promised';
 
 import { SequelizeUserReposiroty } from '../implementations/sequelize'
 import { UserDataDTO } from '../DTOs';
 import User from '../database/models/User';
 
-// @ts-ignore
 const { expect } = chai;
+chai.use(chaiAsPromised);
 
 describe('Sequelize user repository implementation', () => {
   let spy: sinon.SinonStub;
