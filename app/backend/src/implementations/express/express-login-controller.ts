@@ -17,13 +17,12 @@ export default class ExpressLoginController implements Controller<Request, Respo
   ) {}
 
   handle = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
-    if (!req.body.email || !req.body.password) {
-      throw HttpError.badRequest('All fields must be filled');
-    }
-
     try {
-      const { email, password } = req.body;
+      if (!req.body.email || !req.body.password) {
+        throw HttpError.badRequest('All fields must be filled');
+      }
 
+      const { email, password } = req.body;
       const token = await this.loginUserUseCase.execute({ email, password });
 
       return res.status(StatusCodes.OK).json(token);

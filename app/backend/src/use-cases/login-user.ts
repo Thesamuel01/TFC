@@ -10,8 +10,6 @@ import { InvalidEmailError, InvalidPasswordError } from '../entities/errors';
 import { PasswordHashing, TokenHashing } from '../adapters';
 import { ITokenPayload } from '../adapters/token-hashing';
 
-export type LoginUserResponse = TokenDTO;
-
 export default class LoginUser {
   constructor(
     private userRepository: UserRepository,
@@ -19,7 +17,7 @@ export default class LoginUser {
     private passwordHasing: PasswordHashing,
   ) {}
 
-  async execute(data: LoginUserRequestDTO): Promise<LoginUserResponse> {
+  async execute(data: LoginUserRequestDTO): Promise<TokenDTO> {
     if (!Email.validate(data.email) || !Password.validate(data.password)) {
       throw Email.validate(data.email) ? new InvalidPasswordError() : new InvalidEmailError();
     }

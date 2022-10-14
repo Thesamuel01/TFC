@@ -6,9 +6,9 @@ export default class InMemoryMatchRepository implements MatchRepository {
   public matches: MatchDataDTO[] = [
     {
       id: 1,
-      homeTeam: 16,
+      homeTeam: 3,
       homeTeamGoals: 1,
-      awayTeam: 8,
+      awayTeam: 4,
       awayTeamGoals: 1,
       inProgress: false,
       teamHome: {
@@ -20,16 +20,30 @@ export default class InMemoryMatchRepository implements MatchRepository {
     },
     {
       id: 2,
-      homeTeam: 16,
+      homeTeam: 1,
       homeTeamGoals: 2,
-      awayTeam: 9,
+      awayTeam: 5,
       awayTeamGoals: 0,
-      inProgress: true,
+      inProgress: false,
       teamHome: {
-        teamName: 'São Paulo',
+        teamName: 'Corinthians',
       },
       teamAway: {
         teamName: 'Internacional',
+      },
+    },
+    {
+      id: 1,
+      homeTeam: 2,
+      homeTeamGoals: 3,
+      awayTeam: 4,
+      awayTeamGoals: 2,
+      inProgress: true,
+      teamHome: {
+        teamName: 'Vasco',
+      },
+      teamAway: {
+        teamName: 'Grêmio',
       },
     },
   ];

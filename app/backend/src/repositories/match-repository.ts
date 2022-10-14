@@ -7,7 +7,6 @@ export interface FindAllParams {
 
 export interface MatchRepository {
   findAll(params?: FindAllParams): Promise<MatchDataDTO[]>
-  findByPk(id: number): Promise<MatchDataDTO | null>
   update(values: UpdateMatchDTO): Promise<void>
   insert(data: Match): Promise<MatchDataDTO>
 }

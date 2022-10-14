@@ -5,11 +5,23 @@ export default class InMemoryTeamRepository implements TeamRepository {
   public users: Team[] = [
     {
       id: 1,
-      teamName: 'Corinthias',
+      teamName: 'Corinthians',
     },
     {
       id: 2,
       teamName: 'Vasco',
+    },
+    {
+      id: 3,
+      teamName: 'São Paulo',
+    },
+    {
+      id: 4,
+      teamName: 'Grêmio',
+    },
+    {
+      id: 5,
+      teamName: 'Internacional',
     },
   ];
 

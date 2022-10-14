@@ -20,10 +20,6 @@ export default class SequelizeMatchReposiroty implements MatchRepository {
     return data;
   }
 
-  async findByPk(id: number): Promise<MatchDataDTO | null> {
-    return this.model.findByPk(id);
-  }
-
   async update({
     id,
     ...params
