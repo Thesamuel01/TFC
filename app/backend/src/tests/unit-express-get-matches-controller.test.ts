@@ -50,6 +50,7 @@ describe('Express get matches controller implementation', () => {
       expect(result.status).to.be.equal(200)
       expect(result.body).to.be.an('array');
       expect(result.body[0]).to.have.property('inProgress', true);
+      expect(stub).to.have.been.calledWith({ inProgress: true });
     });
 
     it('should return status code 200 and all matches finished when query param inProgress=false is received', async () => {
@@ -62,6 +63,7 @@ describe('Express get matches controller implementation', () => {
       expect(result.status).to.be.equal(200)
       expect(result.body).to.be.an('array');
       expect(result.body[0]).to.have.property('inProgress', false);
+      expect(stub).to.have.been.calledWith({ inProgress: false });
     });
 
     it('should pass a http error to the error handler middleware when quey string received is not a boolean', async () => {

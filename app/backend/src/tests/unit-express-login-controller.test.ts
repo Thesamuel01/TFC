@@ -6,7 +6,7 @@ import 'dotenv/config';
 import { ExpressLoginController } from '../implementations/express';
 import { LoginUserRequestDTO } from '../DTOs';
 import { loginUserUseCase } from './mocks/login-user-use-case-mock';
-import { IncorrectEmailError, IncorrectPasswordError, InvalidTokenError, TokenExpiredError, UnknownError } from '../use-cases/errors';
+import { IncorrectEmailError, IncorrectPasswordError, UnknownError } from '../use-cases/errors';
 import HttpError from '../implementations/express/helpers/http-status-error';
 import testController from './helpers/controllerTest';
 
@@ -67,6 +67,7 @@ describe('Express login user controller implementation', () => {
       expect(result.body)
         .to.be.have.property('token')
         .to.be.a('string');
+      expect(stub).to.have.been.calledWith(body);
     });
 
     it('should pass an error to error handler middleware when email is incorrect error is threw', async () => {
@@ -84,6 +85,8 @@ describe('Express login user controller implementation', () => {
       expect(result.error)
         .to.be.instanceOf(HttpError)
         .and.to.have.deep.property('message', 'Incorrect email or password');
+      expect(stub).to.have.been.calledWith(body);
+      expect(result.spies.next).to.have.been.called;
     });
 
     it('should pass an error to error handler middleware when password is incorrect error is threw', async () => {
@@ -101,6 +104,8 @@ describe('Express login user controller implementation', () => {
       expect(result.error)
         .to.be.instanceOf(HttpError)
         .and.to.have.deep.property('message', 'Incorrect email or password');
+      expect(stub).to.have.been.calledWith(body);
+      expect(result.spies.next).to.have.been.called;
     });
 
 
@@ -117,80 +122,6 @@ describe('Express login user controller implementation', () => {
 
       expect(result.error).to.be.instanceOf(Error);
       expect(result.spies.next).to.have.been.called;
-    });
-});
-
-  describe('validate', () => {
-    let stub: sinon.SinonStub;
-
-    beforeEach(() => {
-      stub = sinon.stub(loginUserUseCase, 'validate');
-    });
-
-    afterEach(() => {
-      stub.restore()
-    });
-
-    it('should return status code 200 and user role', async () => {
-      stub.returns({
-        id: 1,
-        email: 'test@test.com',
-        role: 'user',
-      });
-
-      const headers = { authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwicm9sZSI6InVzZXIiLCJpYXQiOjE2NjQ2MDU1OTEsImV4cCI6MTY2NDYwNTU5MX0.rJAKM1Lx1uC8x4ljy0FY9x3x5uZQxiPFQhxMXV-0_oo'}
-      const sut = new ExpressLoginController(loginUserUseCase);
-      const result = await testController(sut.validate, { headers });
-
-      expect(result.status).to.be.eq(200);
-      expect(result.body).to.be.eql({ role: 'user' });
-    });
-  
-    it('should pass a http error to error handler middleware when there is no token', async () => {
-      stub.restore();
-
-      const sut = new ExpressLoginController(loginUserUseCase);
-      const headers = { }
-  
-      const result = await testController(sut.validate, { headers });
-
-      expect(result.error)
-        .to.be.instanceOf(HttpError)
-        .to.have.property('message', 'Token not found');
-    });
-
-    it('should pass a http error to error handler middleware when there is no token', async () => {
-      stub.throws(new InvalidTokenError());
-
-      const headers = { authorization: 'invalid_token'}
-      const sut = new ExpressLoginController(loginUserUseCase);
-      const result = await testController(sut.validate, { headers });
-
-      expect(result.error)
-        .to.be.instanceOf(HttpError)
-        .to.have.property('message', 'Token must be a valid token');
-    });
-
-    it('should pass a http error to error handler middleware when token is expired', async () => {
-      stub.throws(new TokenExpiredError());
-
-      const headers = { authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwicm9sZSI6InVzZXIiLCJpYXQiOjE2NjQ2MDU1OTEsImV4cCI6MTY2NDYwNTU5MX0.rJAKM1Lx1uC8x4ljy0FY9x3x5uZQxiPFQhxMXV-0_oo'}
-      const sut = new ExpressLoginController(loginUserUseCase);
-      const result = await testController(sut.validate, { headers });
-
-      expect(result.error)
-        .to.be.instanceOf(HttpError)
-        .to.have.property('message', 'Token expired');
-    });
-
-    it('should pass an error to error handler middleware when a unknown error happen', async () => {
-      stub.throws(new UnknownError());
-
-      const headers = { authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwicm9sZSI6InVzZXIiLCJpYXQiOjE2NjQ2MDU1OTEsImV4cCI6MTY2NDYwNTU5MX0.rJAKM1Lx1uC8x4ljy0FY9x3x5uZQxiPFQhxMXV-0_oo'}
-      const sut = new ExpressLoginController(loginUserUseCase);
-      const result = await testController(sut.validate, { headers });
-
-      expect(result.error).to.be.instanceOf(Error);
     });
   });
 });

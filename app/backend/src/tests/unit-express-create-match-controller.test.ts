@@ -18,7 +18,7 @@ describe('Express get teams controller implementation', () => {
   let stub: sinon.SinonStub;
   let createMatchUseCase: CreateMatch;
 
-  before(() => {
+  beforeEach(() => {
     const matchRepository = new InMemoryMatchRepository();
     const teamRepository = new InMemoryTeamRepository();
     createMatchUseCase = new CreateMatch(matchRepository, teamRepository);
@@ -26,7 +26,7 @@ describe('Express get teams controller implementation', () => {
     stub = sinon.stub(createMatchUseCase, 'execute');
   });
 
-  after(() => {
+  afterEach(() => {
     stub.restore();
   });
 
@@ -40,6 +40,7 @@ describe('Express get teams controller implementation', () => {
 
       expect(result.status).to.be.equal(201);
       expect(result.body).to.deep.includes(createdMatch);
+      expect(stub).to.have.been.calledWith(newMatch);
     });
 
     it('should pass a http error to the error handler middleware when both team ids are the same', async () => {
@@ -51,6 +52,7 @@ describe('Express get teams controller implementation', () => {
       expect(result.error).to.be.instanceOf(HttpError)
       expect(result.error).to.have.property('message', 'It is not possible to create a match with two equal teams')
       expect(result.error).to.have.property('statusCode', 401);
+      expect(stub).to.have.been.calledWith(matchWithSameTeamIDs);
     });
 
     it('should pass a http error to the error handler middleware when teams id are not found', async () => {
@@ -62,6 +64,7 @@ describe('Express get teams controller implementation', () => {
       expect(result.error).to.be.instanceOf(HttpError)
       expect(result.error).to.have.property('message', 'There is no team with such id!')
       expect(result.error).to.have.property('statusCode', 404);
+      expect(stub).to.have.been.calledWith(matchWithAnInvalidTeamID);
     });
 
     it('should pass error to the error handler middleware when unexpected error occurs', async () => {

@@ -9,6 +9,7 @@ import { InMemoryTeamRepository } from '../repositories/in-memory'
 import { NotFoundError } from '../use-cases/errors';
 import HttpError from '../implementations/express/helpers/http-status-error';
 import testController from './helpers/controllerTest';
+import { teamsMock } from './mocks/teams-mock';
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -28,19 +29,18 @@ describe('Express get teams controller implementation', () => {
     afterEach(() => stub.restore());
 
     it('should return status code 200 and teams array', async () => {
-      const teams = [{id: 1, teamName: 'Corinthias'}, { id: 2, teamName: 'Vasco' }];
-      stub.resolves(teams);
+      stub.resolves(teamsMock);
 
       const sut = new ExpressGetTeamsController(getTeamsUseCase);
       const result = await testController(sut.handle);
 
       expect(result.body)
         .to.be.a('array')
-        .to.have.deep.ordered.members(teams);
+        .to.have.deep.ordered.members(teamsMock);
     });
 
     it('should return status code 200 and a team when Id is received by params', async () => {
-      stub.resolves({id: 1, teamName: 'Corinthias'});
+      stub.resolves(teamsMock[0]);
 
       const sut = new ExpressGetTeamsController(getTeamsUseCase);
       const result = await testController(sut.handle, { params: { id: '1 '} });
@@ -48,7 +48,8 @@ describe('Express get teams controller implementation', () => {
       expect(result.status).to.be.equal(200);
       expect(result.body).to.be.a('object');
       expect(result.body).to.have.property('id', 1);
-      expect(result.body).to.have.property('teamName', 'Corinthias');
+      expect(result.body).to.have.property('teamName', 'Corinthians');
+      expect(stub).to.have.been.calledWith(1);
     });
 
     it('should pass an error to error handler middleware when team is not found', async () => {
@@ -62,6 +63,7 @@ describe('Express get teams controller implementation', () => {
         .to.be.instanceOf(HttpError)
         .to.have.property('message')
         .to.be.equal('Team not found');
+      expect(stub).to.have.been.calledWith(90);
     });
 
     it('should pass an error to error handler middleware when id param is not a number', async () => {

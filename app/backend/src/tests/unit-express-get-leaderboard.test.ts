@@ -11,7 +11,7 @@ import testController from './helpers/controllerTest';
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe('Express get matches controller implementation', () => {
+describe('Express get leaderboard controller implementation', () => {
   describe('handle', () => {
     let stub: sinon.SinonStub;
     let inMemoryMatchRepository: InMemoryMatchRepository;
@@ -21,9 +21,7 @@ describe('Express get matches controller implementation', () => {
     beforeEach(() => {
       inMemoryMatchRepository = new InMemoryMatchRepository();
       inMemoryTeamRepository = new InMemoryTeamRepository();
-
       getLeaderBoardUseCase = new GetLeaderBoard(inMemoryMatchRepository, inMemoryTeamRepository);
-
       stub = sinon.stub(getLeaderBoardUseCase, 'execute');
     });
 

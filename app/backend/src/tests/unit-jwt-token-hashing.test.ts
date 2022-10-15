@@ -28,7 +28,7 @@ describe('JWT Implementation', () => {
       const token = jwt.sign(tokenPayload, process.env.JWT_SECRET as string, { expiresIn: '1d' })
       
       const sut = new JWTTokenHashing();
-      const result = sut.validate(token)
+      const result = sut.validate(token);
 
       expect(result).to.have.property('isValid').to.be.equal(true);
       expect(result).to.have.property('isExpired').to.be.equal(false);

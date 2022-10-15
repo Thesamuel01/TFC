@@ -36,6 +36,24 @@ describe('Express auth controller implementation', () => {
       const result = await testController(sut.handle, { headers });
       
       expect(result.spies.next).to.have.been.calledOnce;
+      expect(stub).to.have.been.calledWith(headers.authorization);
+    });
+
+    it('should return status code 200 and user role when request is from /validate path', async () => {
+      stub.returns({
+        id: 1,
+        email: 'test@test.com',
+        role: 'user',
+      });
+
+      const headers = { authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwicm9sZSI6InVzZXIiLCJpYXQiOjE2NjQ2MDU1OTEsImV4cCI6MTY2NDYwNTU5MX0.rJAKM1Lx1uC8x4ljy0FY9x3x5uZQxiPFQhxMXV-0_oo'}
+      const url = '.../validate'
+      const sut = new ExpressAuthController(loginUserUseCase);
+      const result = await testController(sut.handle, { headers, url });
+      
+      expect(result.status).to.be.eq(200);
+      expect(result.body).to.be.eql({ role: 'user' });
+      expect(stub).to.have.been.calledWith(headers.authorization);
     });
   
     it('should pass a http error to error handler middleware when there is no token', async () => {
@@ -59,6 +77,7 @@ describe('Express auth controller implementation', () => {
       expect(result.error)
         .to.be.instanceOf(HttpError)
         .to.have.property('message', 'Token must be a valid token');
+      expect(stub).to.have.been.calledWith(headers.authorization);
     });
 
     it('should pass a http error to error handler middleware when token is expired', async () => {
