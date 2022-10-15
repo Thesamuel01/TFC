@@ -18,7 +18,6 @@ implements Controller<Request, Response, NextFunction> {
 
       return res.status(StatusCodes.OK).json(result);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   };

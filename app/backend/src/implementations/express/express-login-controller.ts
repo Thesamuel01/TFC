@@ -4,12 +4,7 @@ import LoginUserUseCase from '../../use-cases/login-user';
 import { Controller } from '../../adapters';
 import HttpError from './helpers/http-status-error';
 import { InvalidEmailError, InvalidPasswordError } from '../../entities/errors';
-import {
-  IncorrectEmailError,
-  IncorrectPasswordError,
-  InvalidTokenError,
-  TokenExpiredError,
-} from '../../use-cases/errors';
+import { IncorrectEmailError, IncorrectPasswordError } from '../../use-cases/errors';
 
 export default class ExpressLoginController implements Controller<Request, Response, NextFunction> {
   constructor(
@@ -33,29 +28,6 @@ export default class ExpressLoginController implements Controller<Request, Respo
 
       if (error instanceof IncorrectEmailError || error instanceof IncorrectPasswordError) {
         return next(HttpError.unauthorized('Incorrect email or password'));
-      }
-
-      return next(error);
-    }
-  };
-
-  validate = (req: Request, res: Response, next: NextFunction): Response | void => {
-    if (!req.headers.authorization) {
-      throw HttpError.unauthorized('Token not found');
-    }
-
-    try {
-      const token = req.headers.authorization;
-      const { role } = this.loginUserUseCase.validate(token);
-
-      return res.status(StatusCodes.OK).json({ role });
-    } catch (error) {
-      if (error instanceof InvalidTokenError) {
-        return next(HttpError.unauthorized('Token must be a valid token'));
-      }
-
-      if (error instanceof TokenExpiredError) {
-        return next(HttpError.unauthorized('Token expired'));
       }
 
       return next(error);

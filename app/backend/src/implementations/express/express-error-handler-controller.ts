@@ -9,7 +9,7 @@ export default class ExpressErrorHandlerController {
     res: Response,
     _next: NextFunction,
   ): Promise<Response | void> => {
-    console.error(err);
+    // console.error(err);
 
     if (err instanceof HttpError) {
       return res.status(err.statusCode).json({ message: err.message });
