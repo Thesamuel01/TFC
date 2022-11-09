@@ -46,6 +46,20 @@ This project used the following technologies and tools:
 # Installing and running the app
 _To run this project properly, docker-compose version should be at `1.29` or higher and node version should be at `16.14.0 LTS` or higher._
 
+
+### Login
+Data to log into frontend app </br>
+``admin``
+```
+email: admin@admin.com
+password: secret_admin
+```
+``user``
+```
+email: user@user.com
+password: secret_user
+```
+
 ### Download the app
 ```
 git clone git@github.com:Thesamuel01/TFC.git
