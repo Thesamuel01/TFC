@@ -2,7 +2,7 @@
 
 This is a project developed at Trybe's Back-End Module.
 
-Trybe Football Club is a full stack application to access information about the Brazilian football championship.
+Trybe Football Club is a full stack application to access information about the Brazilian football championship. It were developed using a node server and Sequelize ORM to manipulate a MySQL database.
 
 ***React frontend and all config files except for the backend/frontend dockerfile were provided by Trybe, the application backend was developed from scratch.***
 
