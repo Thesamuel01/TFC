@@ -72,6 +72,11 @@ git clone git@github.com:Thesamuel01/TFC.git
 cd TFC
 ```
 
+### Install all dependencies
+```
+npm install
+```
+
 ### Build docker containers and their network.
 ```
 npm run compose:up
